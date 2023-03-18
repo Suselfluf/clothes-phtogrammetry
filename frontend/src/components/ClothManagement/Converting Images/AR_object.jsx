@@ -13,6 +13,7 @@ export default function AR_object(props) {
   const [cloth_id, set_cloth_id] = useState(props.cloth_id);
   const [mesh_url, set_mesh_url] = useState("");
   const [is_mesh_recieved, set_is_mesh_recieved] = useState(false);
+  const [mesh_texture_url, set_mesh_texture_url] = useState("");
 
   useEffect(() => {
     return () => {
@@ -20,6 +21,7 @@ export default function AR_object(props) {
       get_augmented_object_by_cloth_id(cloth_id).then((res) => {
         res.forEach((mesh) => {
           set_mesh_url(mesh.aug_model);
+          set_mesh_texture_url(mesh.texture);
           set_is_mesh_recieved(true);
         });
       });
@@ -33,7 +35,10 @@ export default function AR_object(props) {
           <color attach="background" args={["#101010"]} />
           {is_mesh_recieved ? (
             <>
-              <AdminMeshedLookBox mesh_url={mesh_url}></AdminMeshedLookBox>
+              <AdminMeshedLookBox
+                mesh_url={mesh_url}
+                mesh_texture_url={mesh_texture_url}
+              ></AdminMeshedLookBox>
             </>
           ) : (
             <></>
