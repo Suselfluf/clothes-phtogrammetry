@@ -50,33 +50,40 @@ export default function ARObject_Tab(props) {
             </Typography>
             <Grid
               container
-              direction="row"
+              direction={is_loaded && has_aug_model ? "column" : "row"}
               justifyContent="space-around"
               alignItems="center"
             >
               <>
-                <Box>
-                  <Converting_Images
-                    data={props.context}
-                    aug_model={props.context.aug_model}
-                  />
-                </Box>
-                <Divider orientation="vertical" flexItem variant="middle" />
                 {is_loaded && has_aug_model ? (
                   <>
-                    <Box>
+                    <Container>
                       <AR_object
                         aug_model={props.context.aug_model}
                         cloth_id={props.context.id}
                         handle_aug_model_change={change_aug_model}
                       />
-                    </Box>
+                    </Container>
+                    <Divider
+                      sx={{ marginTop: 3 }}
+                      orientation="horizontal"
+                      flexItem
+                      variant="middle"
+                    />
                   </>
                 ) : (
                   <>
                     <Typography>No data yet</Typography>
+                    <Divider orientation="vertical" flexItem variant="middle" />
                   </>
                 )}
+
+                <Box sx={{ marginTop: 5 }}>
+                  <Converting_Images
+                    data={props.context}
+                    aug_model={props.context.aug_model}
+                  />
+                </Box>
               </>
             </Grid>
           </CardContent>

@@ -30,7 +30,7 @@ export default function AR_object(props) {
 
   return (
     <>
-      <Container sx={{ height: "200px" }}>
+      <Container sx={{ height: "400px" }}>
         <Canvas>
           <color attach="background" args={["#101010"]} />
           {is_mesh_recieved ? (
