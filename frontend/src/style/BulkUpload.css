@@ -1,0 +1,19 @@
+input[type="file"]::-webkit-file-upload-button {
+  visibility: hidden;
+}
+input[type="file"]::-webkit-file-upload-text {
+  visibility: hidden;
+}
+/* input[type="file"]::before {
+  content: "";
+  display: none;
+  background: #ddd;
+  padding: 5px 10px;
+  border-radius: 3px;
+} */
+/* input[type="file" i] {
+  display: None;
+} */
+/* input[type="file"]:hover::before {
+  background-color: #aaa;
+} */

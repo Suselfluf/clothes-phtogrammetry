@@ -1,0 +1,60 @@
+version: "3.8"
+
+services:
+  api:
+    build: ./backend
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=True
+      - PYTHONUNBUFFERED=True
+      - DOCKER_IP=192.168.137.21
+    networks:
+      aug_cloth_network:
+        ipv4_address: 192.168.137.21
+    restart: always
+
+  front:
+    container_name: frontend
+    build: ./front
+    # volumes:
+    #   - "./front:/app"
+    #   - "/app/node_modules"
+    ports:
+      - 3000:3000
+    restart: always
+    stdin_open: true
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+    command: npm start
+    networks:
+      aug_cloth_network:
+        ipv4_address: 192.168.137.22
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin
+    volumes:
+      - ~/.container-data/rabbitmq/data/:/var/lib/rabbitmq/
+      - ~/.container-data/rabbitmq/log/:/var/lib/rabbitmq/
+    networks:
+      aug_cloth_network:
+        ipv4_address: 192.168.137.23
+
+volumes:
+  container_data:
+
+networks:
+  aug_cloth_network:
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.137.0/24
