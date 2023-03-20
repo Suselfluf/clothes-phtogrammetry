@@ -22,6 +22,12 @@ class ArObjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = ArObject
         fields = ("__all__")
+        
+class ClothV2CreateSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Clothes_V2
+        fields = ("__all__")
 
 class AugModelSerializer(serializers.ModelSerializer):
     converting_images = serializers.SerializerMethodField()

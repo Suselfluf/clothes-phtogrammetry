@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
 
 # from .producer import publish
-from .serializers import ClothesSerializer, ClothesV2Serializer, ClothesCoverInfoSerializer, ConvertingImagesSerializer, CoverImagesSerializer,ArObjectSerializer
+from .serializers import ClothesSerializer, ClothesV2Serializer, ClothesCoverInfoSerializer, ConvertingImagesSerializer, CoverImagesSerializer,ArObjectSerializer, ClothV2CreateSerializer
 from .models import Clothes, Clothes_V2, CoverImage, ImagesToConvert, ArObject
 from rest_framework.views import APIView
 from django.http import JsonResponse, HttpResponse
@@ -64,13 +64,23 @@ class ClothManagement(APIView):
         cloth = Clothes_V2.objects.get(id=pk)
         serializer = ClothesV2Serializer(cloth,many=False)
         
-        return Response(serializer.data)
-        
-
+        return Response(serializer.data)      
     
     def put(self, request, pk=None):
         cloth = Clothes_V2.objects.get(id=pk)
         serializer = ClothesV2Serializer(instance=cloth, data=request.data)
+        if (serializer.is_valid(raise_exception=True)):
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+    def post(self, request, pk=None):
+        # serializer = ClothesSerializer(data=request.data)
+        # serializer.is_valid(raise_exception=True)
+        # serializer.save()
+        # return Response(serializer.data, status=status.HTTP_201_CREATED)
+        serializer = ClothesV2Serializer(data=request.data)
         if (serializer.is_valid(raise_exception=True)):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
@@ -87,11 +97,6 @@ class ClothesModelViewV2(APIView):
     parser_classes = (MultiPartParser, FormParser)
     
     def get(self, request, pk=None):
-        # cloth = Clothes_V2.objects.all()
-        # serializer = ClothesV2Serializer(cloth,many=True)
-        
-        # return Response(serializer.data)
-    
         clothes = Clothes_V2.objects.all()
         serializer = ClothesCoverInfoSerializer(clothes,many=True)
         
@@ -103,6 +108,18 @@ class ClothesModelViewV2(APIView):
         
         return Response(serializer.data)
     
+    def post(self, request, pk=None):
+        
+        serializer = ClothV2CreateSerializer(data = request.data)
+        
+        if (serializer.is_valid(raise_exception=True)):
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        
+
     def delete(self, request, pk=None):
         clothes = Clothes.objects.get(id=pk)
         clothes.delete()

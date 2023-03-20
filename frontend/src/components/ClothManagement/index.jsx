@@ -8,7 +8,7 @@ import Tab from "@mui/material/Tab";
 import ARObject_Tab from "./ARObject_Tab";
 import ImagesFolder_Tab from "./ImagesFolder_Tab";
 import Description_Tab from "./Description_Tab";
-import cloth_get_by_id from "../../../api/cloth_get/cloth_get_single";
+import cloth_get_by_id from "../../../api/cloth/cloth_get_single";
 import Loader from "../Loader";
 
 export default function CenteredTabs() {

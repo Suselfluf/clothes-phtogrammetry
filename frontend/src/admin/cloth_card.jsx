@@ -9,6 +9,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { BACKEND_URL } from "../const/ulrs";
 import { useEffect } from "react";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import cloth_create_new from "../../api/cloth/cloth_create_new";
 
 export default function ClothCard(props) {
   const [title, setTitle] = useState(props.cloth_data.title);
@@ -16,6 +18,7 @@ export default function ClothCard(props) {
   const [description, setdescription] = useState(props.cloth_data.description);
   const [has_images, set_has_images] = useState(false);
   const [cover_image, setcover_image] = useState([]);
+  const [is_new, set_is_new] = useState(props.new);
 
   useEffect(() => {
     return () => {
@@ -33,56 +36,94 @@ export default function ClothCard(props) {
   const manageCloth = () => {
     navigate(`/admin/manage/:${id}`, { state: props.cloth_data.id });
   };
+
+  const handleCreateNewCloth = async (e) => {
+    // console.log("created");
+    cloth_create_new().then((res) => {
+      navigate(`/admin/manage/:${res.id}`, { state: res.id });
+    });
+  };
+
   return (
-    <Card variant="outlined" sx={{ width: 320 }} className="card_wrapper">
-      <Typography level="h2" fontSize="md" sx={{ mb: 0.5 }}>
-        {title}
-      </Typography>
-      <Typography level="body2">April 24 to May 02, 2021</Typography>
-      <IconButton
-        aria-label="bookmark Bahamas Islands"
-        variant="plain"
-        color="neutral"
-        size="sm"
-        sx={{ position: "absolute", top: "0.5rem", right: "0.5rem" }}
-      ></IconButton>
-      {has_images ? (
+    <>
+      {is_new ? (
         <>
-          <img src={`${BACKEND_URL}${cover_image}`} alt="No-Image" />
+          <Card
+            variant="outlined"
+            sx={{
+              width: 320,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "column",
+            }}
+            className="card_wrapper"
+          >
+            <Box>
+              <Typography fontSize={23}>Create new cloth</Typography>
+            </Box>
+            <Box>
+              <AddCircleIcon
+                sx={{ fontSize: 165 }}
+                onClick={handleCreateNewCloth}
+              />
+            </Box>
+          </Card>
         </>
       ) : (
         <>
-          <Typography
-            sx={{
-              minHeight: "250px",
-              textAlign: "center",
-              alignItems: "center",
-              display: "grid",
-            }}
-          >
-            No image
-          </Typography>
+          <Card variant="outlined" sx={{ width: 320 }} className="card_wrapper">
+            <Typography level="h2" fontSize="md" sx={{ mb: 0.5 }}>
+              {title}
+            </Typography>
+            <Typography level="body2">April 24 to May 02, 2021</Typography>
+            <IconButton
+              aria-label="bookmark Bahamas Islands"
+              variant="plain"
+              color="neutral"
+              size="sm"
+              sx={{ position: "absolute", top: "0.5rem", right: "0.5rem" }}
+            ></IconButton>
+            {has_images ? (
+              <>
+                <img src={`${BACKEND_URL}${cover_image}`} alt="No-Image" />
+              </>
+            ) : (
+              <>
+                <Typography
+                  sx={{
+                    minHeight: "250px",
+                    textAlign: "center",
+                    alignItems: "center",
+                    display: "grid",
+                  }}
+                >
+                  No image
+                </Typography>
+              </>
+            )}
+
+            <Box sx={{ display: "flex" }}>
+              <div>
+                <Typography level="body3">Description:</Typography>
+                <Typography fontSize="lg" fontWeight="lg">
+                  {description}
+                </Typography>
+              </div>
+              <Button
+                variant="solid"
+                size="sm"
+                color="primary"
+                aria-label="Explore Bahamas Islands"
+                sx={{ ml: "auto", fontWeight: 600 }}
+                onClick={manageCloth}
+              >
+                Manage
+              </Button>
+            </Box>
+          </Card>
         </>
       )}
-
-      <Box sx={{ display: "flex" }}>
-        <div>
-          <Typography level="body3">Description:</Typography>
-          <Typography fontSize="lg" fontWeight="lg">
-            {description}
-          </Typography>
-        </div>
-        <Button
-          variant="solid"
-          size="sm"
-          color="primary"
-          aria-label="Explore Bahamas Islands"
-          sx={{ ml: "auto", fontWeight: 600 }}
-          onClick={manageCloth}
-        >
-          Manage
-        </Button>
-      </Box>
-    </Card>
+    </>
   );
 }

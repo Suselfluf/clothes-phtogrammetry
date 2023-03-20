@@ -34,7 +34,6 @@ export default function Cover_images(props) {
 
   const handleCoverIamgesUpdate = (e) => {
     set_cover_images(e);
-
     set_cover_images_len(e.length);
   };
 

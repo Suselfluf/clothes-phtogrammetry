@@ -28,9 +28,6 @@ export default function ARObject_Tab(props) {
   useEffect(() => {
     return () => {
       validate_aut_model().then(() => {
-        // const data = new FormData();
-        // data.append("aug_model", aug_model.id);
-        // console.log(aug_model.id);
         get_converting_images_by_aug_id(aug_model.id).then((res) => {
           set_converting_images(res);
           set_converting_images_len(res.length);

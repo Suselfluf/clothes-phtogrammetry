@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Container, Grid, Typography } from "@mui/material";
 import "../style/AdminLayout.css";
 import ClothCard from "./cloth_card";
-import cloth_get_list from "../../api/cloth_get/cloth_get_list";
+import cloth_get_list from "../../api/cloth/cloth_get_list";
 import { useEffect } from "react";
 import Loader from "../components/Loader";
 
@@ -48,8 +48,10 @@ export default function AdminLayout() {
                 className="cloth_cards_wrapper"
               >
                 {clothes_data.map((cloth, index) => (
-                  <ClothCard cloth_data={cloth} key={index} />
+                  <ClothCard cloth_data={cloth} key={index} new={false} />
                 ))}
+                {/* <AddCloth /> */}
+                <ClothCard cloth_data={"Create New cloth"} new={true} />
               </Grid>
             </>
           ) : (
