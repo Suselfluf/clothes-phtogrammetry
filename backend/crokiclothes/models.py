@@ -67,6 +67,8 @@ class CoverImage(models.Model):
     
 
 class ArObject(models.Model):
+    # aug_model = models.FileField(upload_to=upload_models_path_2, blank=True, default="AugModels/Default/Black_coat_mesh.obj")
+    
     aug_model = models.FileField(upload_to=upload_models_path_2, blank=True)
     cloth = models.ForeignKey(Clothes_V2, on_delete=models.CASCADE, blank=True, null=True)
     texture = models.ImageField(upload_to=upload_texture_path_2, blank=True)
@@ -84,17 +86,4 @@ class ImagesToConvert(models.Model):
         #it will return the title
         return self.aug_model.cloth.title + "Images_To_Convert"
 
-
-# class WearablePart(models.Model):
-#     TOP = 'Top'
-#     BOTTOM = 'Bottom'
-#     CATEGORY_CHOICES = [
-#         (TOP, 'Top'),
-#         (BOTTOM, 'Bottom'),
-#     ]
-#     name = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
-#     cloth = models.ForeignKey(Clothes_V2, on_delete=models.CASCADE, blank=False, null=False)
-    
-#     def __str__(self):
-#         return self.name
 

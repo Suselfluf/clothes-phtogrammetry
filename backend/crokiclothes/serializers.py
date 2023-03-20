@@ -17,6 +17,12 @@ class ConvertingImagesSerializer(serializers.ModelSerializer):
         model = ImagesToConvert
         fields = ("__all__")
            
+class ArObjectSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ArObject
+        fields = ("__all__")
+
 class AugModelSerializer(serializers.ModelSerializer):
     converting_images = serializers.SerializerMethodField()
 
@@ -40,8 +46,6 @@ class ClothesV2Serializer(serializers.ModelSerializer):
         fields = ('__all__')
         
     def get_aug_model(self, obj):
-        # aug_model_instance = ArObject.objects.get(cloth=obj.id)
-        # return AugModelSerializer(aug_model_instance).data
         try:
             aug_model_instance = ArObject.objects.get(cloth=obj.id)
         except ArObject.DoesNotExist:
@@ -51,7 +55,7 @@ class ClothesV2Serializer(serializers.ModelSerializer):
     def get_cover_images(self, obj):
         try:
             cover_images = CoverImage.objects.all().filter(cloth=obj.id)
-        except ArObject.DoesNotExist:
+        except CoverImage.DoesNotExist:
             return []
         return CoverImagesSerializer(cover_images, many=True).data
         
@@ -66,15 +70,6 @@ class ImagesToConvertSerializer(serializers.ModelSerializer):
         model = ImagesToConvert
         fields = (['id','convertingimages','aug_model_id'])
         
-
-
-class ArObjectSerializer(serializers.ModelSerializer):
-    
-
-    class Meta:
-        model = ArObject
-        fields = ("__all__")
-
 class ClothesCoverInfoSerializer(serializers.ModelSerializer):
     cover_images = serializers.SerializerMethodField()
     def get_cover_images(self, obj):

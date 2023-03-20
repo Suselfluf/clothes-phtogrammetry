@@ -144,36 +144,59 @@ class ConvertingImagesForAugObject(APIView):
     parser_classes = (MultiPartParser, FormParser)
     
     def get(self, request, pk=None):
-        aug_model_id = request.data.get('aug_model')
-        converting_images = ImagesToConvert.objects.all().filter(aug_model=aug_model_id)
+        # aug_model_id = request.data.get('aug_model')
+        print(pk)
+        converting_images = ImagesToConvert.objects.all().filter(aug_model=pk)
         response_converting_images = ConvertingImagesSerializer(converting_images,many=True)
         return Response(response_converting_images.data, status=status.HTTP_200_OK)
         
-        # print(request.data)
-        # converting_images = ImagesToConvert.objects.all()
-        # serializer = CoverImagesSerializer(converting_images,many=True)
+    def put(self, request, pk=None):
+        # folder_name = request.data.get('folder-name')
+        aug_model_pn, converting_images_pn = request.data 
+        aug_model_id = request.data.get('aug_model')
+        cloth_id = pk
+        if(aug_model_id == "undefined"):
+            cloth_data = {"cloth":cloth_id }
+            serializer = ArObjectSerializer(data=cloth_data)
+            if (serializer.is_valid(raise_exception=True)):
+                serializer.save()
+                
+                aug_model_id = serializer.data.get('id')
+            else:
+                print(serializer.errors)
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-        # return Response(serializer.data)
-    
-    # def put(self, request, pk=None):
-    #     print(request.data)
-    #     folder_name = request.data.get('folder-name')
-    #     converting_array = []
-    #     for file in request.FILES.getlist('files'):
-    #         if file.content_type.startswith('image'):
-    #             converting_array.append(file)
-    #     print(folder_name, converting_array)
-    #     converting_images = ImagesToConvert.objects.all()
-    #     serializer = ConvertingImagesSerializer(converting_images,many=True)
-        
-    #     return Response(serializer.data)
-    
-      
+        for file in request.FILES.getlist('convertingimages'):
+            # print({aug_model_pn:aug_model_id, converting_images_pn:file})
+            req = {aug_model_pn:aug_model_id, converting_images_pn:file}
+            serializer = ConvertingImagesSerializer(data=req)
+            if (serializer.is_valid(raise_exception=True)):
+                serializer.save()
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            
+        converting_images = ImagesToConvert.objects.all().filter(aug_model=aug_model_id)
+        response_converting_images = ConvertingImagesSerializer(converting_images,many=True)
+        return Response(response_converting_images.data, status=status.HTTP_201_CREATED)
     
     def post(self, request, pk=None):
         # folder_name = request.data.get('folder-name')
         aug_model_pn, converting_images_pn = request.data 
         aug_model_id = request.data.get('aug_model')
+        cloth_id = pk
+        if(aug_model_id == "undefined"):
+            cloth_data = {"cloth":cloth_id }
+            serializer = ArObjectSerializer(data=cloth_data)
+            if (serializer.is_valid(raise_exception=True)):
+                serializer.save()
+                created_aug_object = ArObject.objects.get(cloth=cloth_id)
+                # cloth = Clothes_V2.objects.get(id=pk)
+                # cloth_serializer = ClothesV2Serializer(instance=cloth, data=request.data)
+                print(created_aug_object.id)
+            else:
+                print(serializer.errors)
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
         for file in request.FILES.getlist('convertingimages'):
             print({aug_model_pn:aug_model_id, converting_images_pn:file})
             req = {aug_model_pn:aug_model_id, converting_images_pn:file}
