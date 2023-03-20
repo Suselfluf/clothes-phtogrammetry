@@ -4,7 +4,7 @@ import { BACKEND_CLOTHES_URL } from "../../src/const/ulrs";
 
 export default async function add_converting_images_by_id(id, data) {
   var config = {
-    method: "post",
+    method: "put",
     maxBodyLength: Infinity,
     url: BACKEND_CLOTHES_URL + `/${id}/converting-images`,
     headers: {

@@ -15,23 +15,16 @@ import { BACKEND_CLOTHES_URL, MESHROOM_URL } from "../../../const/ulrs";
 
 export default function Converting_Images(props) {
   const [converting_images, set_converting_images] = useState(
-    [] // Needs validation
+    props.converting_images // Needs validation
   );
   const [converting_images_len, set_converting_images_len] = useState(
-    0 // needs validation
+    props.converting_images_len // needs validation
   );
   const [is_upload_open, setis_upload_open] = useState(false);
   const [is_gallery_open, setis_gallery_open] = useState(false);
   const [is_data_loaded, set_is_data_loaded] = useState(false);
 
   useEffect(() => {
-    try {
-      set_converting_images(props.data.aug_model.converting_images);
-      set_converting_images_len(props.data.aug_model.converting_images.length);
-    } catch (error) {
-      console.log(error);
-      set_converting_images([]);
-    }
     return () => {
       set_is_data_loaded(true);
     };

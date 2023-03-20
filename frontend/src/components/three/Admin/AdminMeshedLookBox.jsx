@@ -25,7 +25,7 @@ export default function AdminMeshedLookBox(props) {
   // const textureLoader = new TextureLoader();
 
   useEffect(() => {
-    console.log(`${BACKEND_URL}${mesh_texture_url}`);
+    // console.log(`${BACKEND_URL}${mesh_texture_url}`);
   }, []);
 
   const handleProgress = (xhr) => {

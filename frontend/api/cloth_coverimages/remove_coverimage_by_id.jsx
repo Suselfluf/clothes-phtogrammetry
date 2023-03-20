@@ -6,21 +6,20 @@ export default async function remove_coverimage_by_id(image_id, data) {
   var config = {
     method: "delete",
     maxBodyLength: Infinity,
-    url: BACKEND_CLOTHES_URL + `/${id}/coverimages`,
+    url: BACKEND_CLOTHES_URL + `/${image_id}/coverimages`,
     headers: {
       "Content-Type": "multipart/form-data",
     },
     data: data,
   };
-  console.log(config);
 
-  // const response = await axios(config)
-  //   .then(function (response) {
-  //     return response.data;
-  //   })
-  //   .catch(function (error) {
-  //     return error;
-  //   });
+  const response = await axios(config)
+    .then(function (response) {
+      return response.data;
+    })
+    .catch(function (error) {
+      return error;
+    });
 
-  // return response;
+  return response;
 }

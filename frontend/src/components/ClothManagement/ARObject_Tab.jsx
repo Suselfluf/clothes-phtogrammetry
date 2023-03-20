@@ -22,13 +22,29 @@ export default function ARObject_Tab(props) {
   const [is_loaded, set_is_loaded] = useState(false);
   const [aug_model, set_aug_model] = useState(props.aug_model);
   const [has_aug_model, set_has_aug_model] = useState(false);
+  const [converting_images, set_converting_images] = useState([]);
+  const [converting_images_len, set_converting_images_len] = useState(0);
 
   useEffect(() => {
     return () => {
-      aug_model == false ? set_has_aug_model(false) : set_has_aug_model(true);
-      set_is_loaded(true);
+      validate_aut_model().then(() => {
+        // const data = new FormData();
+        // data.append("aug_model", aug_model.id);
+        // console.log(aug_model.id);
+        get_converting_images_by_aug_id(aug_model.id).then((res) => {
+          set_converting_images(res);
+          set_converting_images_len(res.length);
+          set_is_loaded(true);
+        });
+      });
     };
   }, []);
+
+  const validate_aut_model = async (e) => {
+    aug_model == false ? set_has_aug_model(false) : set_has_aug_model(true);
+
+    return true;
+  };
 
   const change_aug_model = (data) => {
     console.log("ArObject_Tab: change_aug_model ewoked");
@@ -77,13 +93,16 @@ export default function ARObject_Tab(props) {
                     <Divider orientation="vertical" flexItem variant="middle" />
                   </>
                 )}
-
-                <Box sx={{ marginTop: 5 }}>
-                  <Converting_Images
-                    data={props.context}
-                    aug_model={props.context.aug_model}
-                  />
-                </Box>
+                {is_loaded && (
+                  <Box sx={{ marginTop: 5 }}>
+                    <Converting_Images
+                      data={props.context}
+                      aug_model={props.context.aug_model}
+                      converting_images={converting_images}
+                      converting_images_len={converting_images_len}
+                    />
+                  </Box>
+                )}
               </>
             </Grid>
           </CardContent>

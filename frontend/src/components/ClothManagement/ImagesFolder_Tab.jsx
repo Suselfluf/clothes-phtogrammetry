@@ -63,9 +63,6 @@ export default function ImagesFolder_Tab(props) {
               {/* <BulkImagesForm></BulkImagesForm> */}
             </Box>
           </CardContent>
-          {/* <CardActions>
-            <Button size="small">Learn More</Button>
-          </CardActions> */}
         </Card>
       </Container>
     </>

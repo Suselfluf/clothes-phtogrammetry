@@ -47,9 +47,11 @@ export default function Photos_Gallery(props) {
           const data = new FormData();
           data.append("aug_model", aug_model_id);
           data.append("id", image_id);
-          remove_converting_image_by_id(image_id, data).then((res) => {
-            props.handleUpdate(res);
-          });
+          remove_converting_image_by_id(image_id, data, cloth_id).then(
+            (res) => {
+              props.handleUpdate(res);
+            }
+          );
         } catch (error) {}
         break;
       }
@@ -102,11 +104,24 @@ export default function Photos_Gallery(props) {
               <ImageList variant="masonry" cols={3} gap={8}>
                 {props.images.map((item, key) => (
                   <ImageListItem key={key}>
-                    <img
+                    {layout == "converting_images" ? (
+                      <img
+                        src={`${BACKEND_URL}${item.convertingimages}?w=348&fit=crop&auto=format`}
+                        alt={"Failed to load"}
+                        loading="lazy"
+                      />
+                    ) : (
+                      <img
+                        src={`${BACKEND_URL}${item.coverimages}?w=348&fit=crop&auto=format`}
+                        alt={"Failed to load"}
+                        loading="lazy"
+                      />
+                    )}
+                    {/* <img
                       src={`${BACKEND_URL}${item.convertingimages}?w=348&fit=crop&auto=format`}
                       alt={"Failed to load"}
                       loading="lazy"
-                    />
+                    /> */}
                     <IconButton
                       sx={{ position: "absolute", top: "2%", right: "2%" }}
                       aria-label="Delete Image"
