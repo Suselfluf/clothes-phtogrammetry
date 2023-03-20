@@ -41,13 +41,6 @@ export default function CenteredTabs() {
 
   return (
     <>
-      <p
-        onClick={(e) => {
-          console.log(cloth_data);
-        }}
-      >
-        Click
-      </p>
       <Box sx={{ width: "100%", bgcolor: "background.paper" }}>
         <Tabs value={value} onChange={handleChange} centered>
           <Tab label="Description" />

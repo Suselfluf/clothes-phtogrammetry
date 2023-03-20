@@ -2,15 +2,11 @@ import axios from "axios";
 import React from "react";
 import { BACKEND_CLOTHES_URL } from "../../src/const/ulrs";
 
-export default async function remove_converting_image_by_id(id, data) {
+export default async function update_augmented_object_by_cloth_id(cloth_id) {
   var config = {
-    method: "delete",
+    method: "put",
     maxBodyLength: Infinity,
-    url: BACKEND_CLOTHES_URL + `/${id}/converting-images`,
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-    data: data,
+    url: `${BACKEND_CLOTHES_URL}/${cloth_id}/augmented-clothes`,
   };
 
   const response = await axios(config)

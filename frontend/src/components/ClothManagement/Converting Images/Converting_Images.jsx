@@ -110,9 +110,10 @@ export default function Converting_Images(props) {
         {is_gallery_open ? (
           <>
             <Photos_Gallery
-              type={"cover_images"}
+              type={"converting_images"}
               images={converting_images}
               cloth_id={props.data.id}
+              aug_model_id={props.data.aug_model.id}
               update_image_list={set_converting_images}
               handleUpdate={handleConvertingIamgesUpdate}
             />

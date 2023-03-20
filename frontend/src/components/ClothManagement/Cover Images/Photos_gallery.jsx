@@ -10,20 +10,25 @@ import { Box } from "@mui/system";
 import { Typography } from "@mui/material";
 import PlaylistRemoveIcon from "@mui/icons-material/PlaylistRemove";
 import remove_coverimage_by_id from "../../../../api/cloth_coverimages/remove_coverimage_by_id";
+import remove_converting_image_by_id from "../../../../api/converting_images/remove_converting_image_by_id";
 import ImageList from "@mui/material/ImageList";
+import { Button } from "@mui/material";
 import ImageListItem from "@mui/material/ImageListItem";
+import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
+import CircularProgress from "@mui/material/CircularProgress";
+import LinearWithValueLabel from "../../Loader/Linear_progress_with_label";
+import update_augmented_object_by_cloth_id from "../../../../api/augmented_objects/update_augmented_object_by_cloth_id";
 
 export default function Photos_Gallery(props) {
   const [layout, set_layout] = useState(props.type);
   const [cloth_id, set_cloth_id] = useState(props.cloth_id);
-
+  const [aug_model_id, set_aug_model_id] = useState(props.aug_model_id);
+  const [is_convert_pending, set_is_convert_pending] = useState(false);
   useEffect(() => {
     return () => {};
   }, []);
 
   const handleRemoveImage = (image_id) => {
-    const data = new FormData();
-
     switch (layout) {
       case "cover_images":
         try {
@@ -37,17 +42,54 @@ export default function Photos_Gallery(props) {
           console.log(error);
         }
         break;
+      case "converting_images": {
+        try {
+          const data = new FormData();
+          data.append("aug_model", aug_model_id);
+          data.append("id", image_id);
+          remove_converting_image_by_id(image_id, data).then((res) => {
+            props.handleUpdate(res);
+          });
+        } catch (error) {}
+        break;
+      }
     }
+  };
+
+  const handleConverting = (event) => {
+    console.log(event);
+    set_is_convert_pending(!is_convert_pending);
+    update_augmented_object_by_cloth_id(cloth_id).then((res) => {
+      console.log(res);
+    });
   };
 
   return (
     <>
       {props.images.length != 0 ? (
         <>
+          <Box sx={{ display: "grid", justifyContent: "center" }}>
+            <Button
+              sx={{ marginBottom: 3 }}
+              color={!is_convert_pending ? "primary" : "grey"}
+              variant="contained"
+              endIcon={
+                !is_convert_pending ? (
+                  <PublishedWithChangesIcon />
+                ) : (
+                  <CircularProgress color="inherit" size={20} />
+                )
+              }
+              onClick={handleConverting}
+            >
+              Convert into AR Object
+            </Button>
+            {is_convert_pending && <LinearWithValueLabel />}{" "}
+            {/*For next iteration to track the progress of convertation*/}
+          </Box>
           <List
             sx={{
               minWidth: "360px",
-              // maxWidth: 360,
               bgcolor: "background.paper",
               position: "relative",
               overflow: "auto",
@@ -61,7 +103,7 @@ export default function Photos_Gallery(props) {
                 {props.images.map((item, key) => (
                   <ImageListItem key={key}>
                     <img
-                      src={`${BACKEND_URL}${item.coverimages}?w=348&fit=crop&auto=format`}
+                      src={`${BACKEND_URL}${item.convertingimages}?w=348&fit=crop&auto=format`}
                       alt={"Failed to load"}
                       loading="lazy"
                     />
@@ -81,6 +123,7 @@ export default function Photos_Gallery(props) {
                 ))}
               </ImageList>
             </Box>
+            <Box></Box>
           </List>
         </>
       ) : (

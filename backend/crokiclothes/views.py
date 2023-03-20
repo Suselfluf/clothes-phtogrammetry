@@ -187,7 +187,15 @@ class ConvertingImagesForAugObject(APIView):
         response_converting_images = ConvertingImagesSerializer(converting_images,many=True)
         return Response(response_converting_images.data, status=status.HTTP_201_CREATED)
             
-
+    def delete(self, request, pk=None): 
+        aug_model_id = request.data.get('aug_model')
+        convering_image_id = request.data.get('id')
+        converting_image = ImagesToConvert.objects.get(id=convering_image_id)
+        converting_image.delete()
+        rest_converting_images = ImagesToConvert.objects.all().filter(aug_model=aug_model_id)
+        serializer = ConvertingImagesSerializer(rest_converting_images,many=True)
+        
+        return Response(serializer.data)
 
 class AugmentedObjView(APIView):
     parser_classes = (MultiPartParser, FormParser)
@@ -196,7 +204,12 @@ class AugmentedObjView(APIView):
 
         aug_object = ArObject.objects.all().filter(cloth=pk)
         aug_object_serialized = ArObjectSerializer(aug_object,many=True)
-        # return FileResponse(aug_object_serialized, content_type='image/png')
+        return Response(aug_object_serialized.data, status=status.HTTP_200_OK)
+    
+    def put(self, request, pk=None):
+
+        aug_object = ArObject.objects.all().filter(cloth=pk)
+        aug_object_serialized = ArObjectSerializer(aug_object,many=True)
         return Response(aug_object_serialized.data, status=status.HTTP_200_OK)
     
    

@@ -19,17 +19,6 @@ function AdminClothLook(props) {
     console.log("Progressing : ", percentage);
   };
 
-  // const loadTexture = (object) => {
-  //   textureLoader.load(`${BACKEND_URL}${props.mesh_texture_url}`, (texture) => {
-  //     // xhr.traverse((node) => {
-  //     //   if (node instanceof Mesh) {
-  //     //     node.material.map = texture;
-  //     //   }
-  //     // });
-  //     return texture;
-  //   });
-  // };
-
   const texture = useLoader(
     TextureLoader,
     `${BACKEND_URL}${props.mesh_texture_url}`

@@ -45,6 +45,7 @@ export default function BulkMeshImagesForm(props) {
     // });
     add_converting_images_by_id(props.cloth_id, data).then((res) => {
       console.log(res);
+      props.handleUpdate(res);
     });
   };
 
