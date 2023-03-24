@@ -14,14 +14,14 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from crokiclothes import views
 from crokiclothes import urls
 # from crokiclothes.views import terminalCheck
 from rest_framework import routers
 from django.conf import settings
 from django.conf.urls.static import static
-
+from rest_framework_simplejwt.views import TokenRefreshView, TokenObtainPairView, TokenVerifyView
 router = routers.DefaultRouter()
 
 router.register(r'clothes',views.ClothesView, 'cloth')
@@ -30,6 +30,13 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # path('api/', include(router.urls)),
     path('api/', include('crokiclothes.urls')),
+    path('api/drf-auth/', include("rest_framework.urls")),
+    path('api/admin-auth/', include('djoser.urls')),
+    re_path(r'^auth/', include('djoser.urls.authtoken')),
+    path('api/admin-auth/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/admin-auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/admin-auth/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
+    
     # path("mesh", terminalCheck, name="home")
 ]
 
