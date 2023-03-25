@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 from crokiclothes import views
 from crokiclothes import urls
+from users import urls
 # from crokiclothes.views import terminalCheck
 from rest_framework import routers
 from django.conf import settings
@@ -31,6 +32,7 @@ urlpatterns = [
     # path('api/', include(router.urls)),
     path('api/', include('crokiclothes.urls')),
     path('api/drf-auth/', include("rest_framework.urls")),
+    path('api/user-auth/', include('users.urls', namespace="users")),
     path('api/admin-auth/', include('djoser.urls')),
     re_path(r'^auth/', include('djoser.urls.authtoken')),
     path('api/admin-auth/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),

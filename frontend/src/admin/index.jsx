@@ -7,6 +7,7 @@ import ClothCard from "./cloth_card";
 import cloth_get_list from "../../api/cloth/cloth_get_list";
 import { useEffect } from "react";
 import Loader from "../components/Loader";
+import ResponsiveAppBar from "../components/AppBar";
 
 export default function AdminLayout() {
   const [isAuth, setisAuth] = useState(false);
@@ -25,6 +26,7 @@ export default function AdminLayout() {
 
   return (
     <>
+      <ResponsiveAppBar />
       <Container maxWidth="xl">
         <Grid
           container
