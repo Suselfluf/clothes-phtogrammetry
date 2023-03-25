@@ -13,6 +13,7 @@ function ResponsiveAppBar() {
   const pages = [
     <Link to="/client">Client</Link>,
     <Link to="/admin">Admin</Link>,
+    <Link to="/logout">Log out</Link>,
   ];
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);

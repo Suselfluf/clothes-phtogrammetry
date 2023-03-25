@@ -32,7 +32,7 @@ tokenInstance.interceptors.response.use(
 
     if (
       error.response.status === 401 &&
-      originalRequest.url === baseURL + "token/refresh/"
+      originalRequest.url === baseURL + "/admin-auth/token/refresh/"
     ) {
       window.location.href = "/login/";
       return Promise.reject(error);
@@ -50,11 +50,11 @@ tokenInstance.interceptors.response.use(
 
         // exp date in token is expressed in seconds, while now() returns milliseconds:
         const now = Math.ceil(Date.now() / 1000);
-        console.log(tokenParts.exp);
+        // console.log(tokenParts.exp);
 
         if (tokenParts.exp > now) {
           return axiosInstance
-            .post("/token/refresh/", { refresh: refreshToken })
+            .post("/admin-auth/token/refresh/", { refresh: refreshToken })
             .then((response) => {
               localStorage.setItem("access_token", response.data.access);
               localStorage.setItem("refresh_token", response.data.refresh);

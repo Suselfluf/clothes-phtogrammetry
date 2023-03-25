@@ -26,7 +26,7 @@ export default function AdminLayout() {
 
   return (
     <>
-      <ResponsiveAppBar />
+      {/* <ResponsiveAppBar /> */}
       <Container maxWidth="xl">
         <Grid
           container

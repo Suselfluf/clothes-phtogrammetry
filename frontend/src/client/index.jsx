@@ -5,7 +5,7 @@ import MeshContainer from "../components/three/MeshContainer";
 export default function ClientLayout() {
   return (
     <>
-      <ResponsiveAppBar />
+      {/* <ResponsiveAppBar /> */}
       <div>ClientLayout</div>
 
       <MeshContainer />

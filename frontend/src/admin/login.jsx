@@ -31,7 +31,7 @@ export default function SignIn() {
       try {
         tokenInstance
           .post(`admin-auth/token/verify/`, {
-            token: localStorage.getItem("access_token"),
+            token: localStorage.getItem("refresh_token"),
           })
           .then((res) => {
             Auth.login();
@@ -43,7 +43,6 @@ export default function SignIn() {
       } catch (error) {
         console.error(error);
       }
-
       // navigate("/welcome");
     };
   }, []);
@@ -79,7 +78,7 @@ export default function SignIn() {
 
   return (
     <>
-      <ResponsiveAppBar></ResponsiveAppBar>
+      {/* <ResponsiveAppBar></ResponsiveAppBar> */}
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <div>
@@ -132,7 +131,7 @@ export default function SignIn() {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href="/signup" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
