@@ -97,8 +97,10 @@ class ClothManagement(APIView):
     
 class ClothesModelViewV2(APIView):
     parser_classes = (MultiPartParser, FormParser)
+    permission_classes = (IsAdminUser, )
     # permission_classes = (IsAuthenticatedOrReadOnly, )
     # permission_classes = (IsAuthenticated, )
+    
     def get(self, request, pk=None):
         clothes = Clothes_V2.objects.all()
         serializer = ClothesCoverInfoSerializer(clothes,many=True)
