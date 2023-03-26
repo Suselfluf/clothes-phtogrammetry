@@ -34,10 +34,14 @@ export default function SignIn() {
             token: localStorage.getItem("refresh_token"),
           })
           .then((res) => {
-            Auth.login();
-            // Auth.trylogin(res);
-            if (Auth.isAuthenticated()) {
-              navigate("/welcome");
+            console.log(res);
+            if (res.status === 200) {
+              console.log("success");
+              Auth.login();
+              // Auth.trylogin(res);
+              if (Auth.isAuthenticated()) {
+                navigate("/welcome");
+              }
             }
           });
       } catch (error) {

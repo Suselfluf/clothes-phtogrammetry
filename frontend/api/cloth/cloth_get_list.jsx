@@ -7,9 +7,9 @@ export default async function cloth_get_list() {
     method: "get",
     maxBodyLength: Infinity,
     url: BACKEND_CLOTHES_URL,
-    // headers: {
-    //   Cookie: "csrftoken=XRgOykjULWZPmRcoI6dKECFtCO4FcWFN",
-    // },
+    headers: {
+      Authorization: "JWT " + localStorage.getItem("access_token"),
+    },
   };
 
   const responce = await axios(config)
