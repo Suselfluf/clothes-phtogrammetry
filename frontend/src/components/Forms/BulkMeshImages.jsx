@@ -9,7 +9,7 @@ import { Tooltip, Button } from "@mui/material";
 import PublishIcon from "@mui/icons-material/Publish";
 import TextField from "@mui/material/TextField";
 import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
-import send_images from "../../../api/Meshroom/send_images";
+import send_images from "../../../api/meshroom/send_images";
 import { SEND_IMAGES_MESHROOM_URL } from "../../const/ulrs";
 import add_converting_images_by_id from "../../../api/converting_images/add_converting_images_by_id";
 

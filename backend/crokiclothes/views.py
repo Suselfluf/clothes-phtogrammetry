@@ -6,6 +6,8 @@ from rest_framework import viewsets, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.permissions import *
+
 
 # from .producer import publish
 from .serializers import ClothesSerializer, ClothesV2Serializer, ClothesCoverInfoSerializer, ConvertingImagesSerializer, CoverImagesSerializer,ArObjectSerializer, ClothV2CreateSerializer
@@ -95,6 +97,9 @@ class ClothManagement(APIView):
     
 class ClothesModelViewV2(APIView):
     parser_classes = (MultiPartParser, FormParser)
+    permission_classes = (IsAdminUser, )
+    # permission_classes = (IsAuthenticatedOrReadOnly, )
+    # permission_classes = (IsAuthenticated, )
     
     def get(self, request, pk=None):
         clothes = Clothes_V2.objects.all()

@@ -9,7 +9,7 @@ import { Tooltip, Button } from "@mui/material";
 import PublishIcon from "@mui/icons-material/Publish";
 import TextField from "@mui/material/TextField";
 import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
-import send_images from "../../../api/Meshroom/send_images";
+import send_images from "../../../api/meshroom/send_images";
 
 export default function BulkImagesForm(props) {
   const [bulkImagesArray, addToBulkImages] = useState([]);
