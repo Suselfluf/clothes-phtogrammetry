@@ -36,7 +36,6 @@ export default function SignIn() {
           .then((res) => {
             console.log(res);
             if (res.status === 200) {
-              console.log("success");
               Auth.login();
               // Auth.trylogin(res);
               if (Auth.isAuthenticated()) {

@@ -38,8 +38,8 @@ export default function ClothCard(props) {
   };
 
   const handleCreateNewCloth = async (e) => {
-    // console.log("created");
     cloth_create_new().then((res) => {
+      console.log(res);
       navigate(`/admin/manage/:${res.id}`, { state: res.id });
     });
   };

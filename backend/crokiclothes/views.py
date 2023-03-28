@@ -10,7 +10,7 @@ from rest_framework.permissions import *
 
 
 # from .producer import publish
-from .serializers import ClothesSerializer, ClothesV2Serializer, ClothesCoverInfoSerializer, ConvertingImagesSerializer, CoverImagesSerializer,ArObjectSerializer, ClothV2CreateSerializer
+from .serializers import *
 from .models import Clothes, Clothes_V2, CoverImage, ImagesToConvert, ArObject
 from rest_framework.views import APIView
 from django.http import JsonResponse, HttpResponse
@@ -20,6 +20,7 @@ from django.http import FileResponse
 
 class ClothesModelView(APIView):
     parser_classes = (MultiPartParser, FormParser)
+    permission_classes = (IsAuthenticatedOrReadOnly)
     
     def get(self, request):
         
@@ -116,7 +117,6 @@ class ClothesModelViewV2(APIView):
     def post(self, request, pk=None):
         
         serializer = ClothV2CreateSerializer(data = request.data)
-        
         if (serializer.is_valid(raise_exception=True)):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -167,7 +167,6 @@ class ConvertingImagesForAugObject(APIView):
     
     def get(self, request, pk=None):
         # aug_model_id = request.data.get('aug_model')
-        print(pk)
         converting_images = ImagesToConvert.objects.all().filter(aug_model=pk)
         response_converting_images = ConvertingImagesSerializer(converting_images,many=True)
         return Response(response_converting_images.data, status=status.HTTP_200_OK)
@@ -214,13 +213,13 @@ class ConvertingImagesForAugObject(APIView):
                 created_aug_object = ArObject.objects.get(cloth=cloth_id)
                 # cloth = Clothes_V2.objects.get(id=pk)
                 # cloth_serializer = ClothesV2Serializer(instance=cloth, data=request.data)
-                print(created_aug_object.id)
+                # print(created_aug_object.id)
             else:
                 print(serializer.errors)
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
         for file in request.FILES.getlist('convertingimages'):
-            print({aug_model_pn:aug_model_id, converting_images_pn:file})
+           
             req = {aug_model_pn:aug_model_id, converting_images_pn:file}
             serializer = ConvertingImagesSerializer(data=req)
             if (serializer.is_valid(raise_exception=True)):
@@ -268,7 +267,36 @@ class ClothesAugView(APIView):
         return FileResponse(response, content_type='image/png')
     
   
+class WorkshopView(APIView):
+    parser_classes = (MultiPartParser, FormParser)
+    permission_classes = (IsAuthenticatedOrReadOnly, )
+    
+    def get(self, request, pk=None):
+        wearable_part = request.data.get('wearable_part')
+        aug_object = Clothes_V2.objects.all().filter(wearable_part=wearable_part)
+        aug_object_serialized = WorkshopSerializer(aug_object,many=True)
+        
+        return Response(aug_object_serialized.data, status=status.HTTP_200_OK)
+    
+    def post(self, request, pk=None):
+        wearable_part = request.data.get('wearable_part')
+        aug_object = Clothes_V2.objects.all().filter(wearable_part=wearable_part)
+        aug_object_serialized = WorkshopSerializer(aug_object,many=True)
+        
+        return Response(aug_object_serialized.data, status=status.HTTP_200_OK)
         
     
+# class WorkshopBottomView(APIView):
+#     parser_classes = (MultiPartParser, FormParser)
+#     permission_classes = (IsAuthenticatedOrReadOnly, )
     
+#     def get(self, request, pk=None):
+#         pass
     
+# class WorkshopFullView(APIView):
+#     parser_classes = (MultiPartParser, FormParser)
+#     permission_classes = (IsAuthenticatedOrReadOnly, )
+    
+#     def get(self, request, pk=None):
+#         pass
+     

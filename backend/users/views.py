@@ -2,9 +2,13 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializers import CustomUserSerializer
+from .models import NewUser
+from .serializers import CustomUserSerializer, UserSerializaer
 from rest_framework_simplejwt.tokens import RefreshToken, OutstandingToken
-from rest_framework.permissions import AllowAny
+from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly, IsAuthenticated
+from django.conf import settings
+import jwt
 
 
 class CustomUserCreate(APIView):
@@ -32,3 +36,29 @@ class BlacklistTokenUpdateView(APIView):
             return Response(status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+        
+class IdentifyUser(APIView):
+    permission_classes = [AllowAny,]
+    parser_classes = (MultiPartParser, FormParser)
+    
+    def get(self, request, pk=None):
+        # print(request.headers.get('Authorization'))
+        token = request.headers.get('Authorization').split(' ')[1]
+        # print(token.split(' ')[1])
+        decoded_token = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
+        user_id = decoded_token['user_id']
+        print(user_id)
+        user = NewUser.objects.get(id=user_id)
+        serializer = UserSerializaer(instance=user)
+        
+        # clothes = Clothes.objects.all()
+        # serializer = ClothesSerializer(clothes,many=True)
+        
+        return Response(serializer.data)
+          
+    # def post(self, request):
+    #     serializer = ClothesSerializer(data=request.data)
+    #     serializer.is_valid(raise_exception=True)
+    #     serializer.save()
+    #     return Response(serializer.data, status=status.HTTP_201_CREATED)

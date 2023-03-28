@@ -25,3 +25,8 @@ class CustomUserSerializer(serializers.ModelSerializer):
         
         instance.save()
         return instance
+    
+class UserSerializaer(serializers.ModelSerializer):
+    class Meta:
+        model = NewUser
+        fields = ("user_name","profile_image","is_staff")
