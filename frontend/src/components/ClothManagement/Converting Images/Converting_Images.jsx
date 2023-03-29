@@ -26,10 +26,10 @@ export default function Converting_Images(props) {
   const [is_data_loaded, set_is_data_loaded] = useState(false);
 
   useEffect(() => {
-    console.log(converting_images);
+    // console.log(converting_images);
     return () => {
       // console.log(props.aug_model);
-      props.aug_model ? console.log(props.aug_model) : console.log("No model");
+      // props.aug_model ? console.log(props.aug_model) : console.log("No model");
       set_is_data_loaded(true);
     };
   }, []);

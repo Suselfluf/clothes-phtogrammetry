@@ -31,7 +31,7 @@ export default function ARObject_Tab(props) {
     return () => {
       validate_aug_model().then(() => {
         get_augmented_object_by_cloth_id(props.context.id).then((res) => {
-          console.log(res.aug_model);
+          // console.log(res.aug_model);
           set_aug_model(res.aug_model);
           try {
             set_converting_images(res.aug_model.converting_images);
