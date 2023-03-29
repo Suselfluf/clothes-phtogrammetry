@@ -20,11 +20,9 @@ export default function AR_object(props) {
     return () => {
       props.aug_model.aug_model &&
         get_augmented_object_by_cloth_id(cloth_id).then((res) => {
-          res.forEach((mesh) => {
-            set_mesh_url(mesh.aug_model);
-            set_mesh_texture_url(mesh.texture);
-            set_is_mesh_recieved(true);
-          });
+          set_mesh_url(res.aug_model.aug_model);
+          set_mesh_texture_url(res.aug_model.texture);
+          set_is_mesh_recieved(true);
         });
     };
   }, []);

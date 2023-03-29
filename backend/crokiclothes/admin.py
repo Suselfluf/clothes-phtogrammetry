@@ -1,9 +1,9 @@
 from django.contrib import admin
-from .models import Clothes, Clothes_V2, CoverImage, ImagesToConvert, ArObject
+from .models import Clothes, Clothes_V2, CoverImage, ImagesToConvert, ArObject, TextureImages
 # Register your models here.
 
-# class WearablePartInline(admin.TabularInline):
-#     model = WearablePart
+class TextureInline(admin.TabularInline):
+    model = TextureImages
 
 class CoverImageInline(admin.TabularInline):
     model = CoverImage
@@ -20,8 +20,8 @@ class Ar_objectInline(admin.TabularInline):
 class ArObjectAdmin(admin.ModelAdmin):
     list_display = ("id","aug_model","texture")
     inlines =[
-        
-        ImagesToConvertInline
+        ImagesToConvertInline,
+        TextureInline
     ]
     
 class ClothesAdminV2(admin.ModelAdmin):

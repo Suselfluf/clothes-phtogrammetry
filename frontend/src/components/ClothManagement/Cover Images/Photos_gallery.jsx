@@ -71,21 +71,26 @@ export default function Photos_Gallery(props) {
       {props.images.length != 0 ? (
         <>
           <Box sx={{ display: "grid", justifyContent: "center" }}>
-            <Button
-              sx={{ marginBottom: 3 }}
-              color={!is_convert_pending ? "primary" : "grey"}
-              variant="contained"
-              endIcon={
-                !is_convert_pending ? (
-                  <PublishedWithChangesIcon />
-                ) : (
-                  <CircularProgress color="inherit" size={20} />
-                )
-              }
-              onClick={handleConverting}
-            >
-              Convert into AR Object
-            </Button>
+            {layout == "converting_images" && (
+              <>
+                {" "}
+                <Button
+                  sx={{ marginBottom: 3 }}
+                  color={!is_convert_pending ? "primary" : "grey"}
+                  variant="contained"
+                  endIcon={
+                    !is_convert_pending ? (
+                      <PublishedWithChangesIcon />
+                    ) : (
+                      <CircularProgress color="inherit" size={20} />
+                    )
+                  }
+                  onClick={handleConverting}
+                >
+                  Convert into AR Object
+                </Button>
+              </>
+            )}
             {is_convert_pending && <LinearWithValueLabel />}{" "}
             {/*For next iteration to track the progress of convertation*/}
           </Box>

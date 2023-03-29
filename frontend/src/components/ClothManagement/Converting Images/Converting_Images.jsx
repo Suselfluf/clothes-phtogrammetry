@@ -17,6 +17,7 @@ export default function Converting_Images(props) {
   const [converting_images, set_converting_images] = useState(
     props.converting_images // Needs validation
   );
+  const [has_aug_model, set_has_model] = useState(false);
   const [converting_images_len, set_converting_images_len] = useState(
     props.converting_images_len // needs validation
   );
@@ -25,7 +26,10 @@ export default function Converting_Images(props) {
   const [is_data_loaded, set_is_data_loaded] = useState(false);
 
   useEffect(() => {
+    console.log(converting_images);
     return () => {
+      // console.log(props.aug_model);
+      props.aug_model ? console.log(props.aug_model) : console.log("No model");
       set_is_data_loaded(true);
     };
   }, []);
@@ -63,17 +67,27 @@ export default function Converting_Images(props) {
         {is_data_loaded ? (
           <>
             <Box sx={{ display: "flex", justifyContent: "space-evenly" }}>
-              <IconButton
-                aria-label={notificationsLabel(100)}
-                onClick={(e) => {
-                  setis_gallery_open(!is_gallery_open);
-                  setis_upload_open(false);
-                }}
-              >
-                <Badge badgeContent={converting_images_len} color="secondary">
-                  <PermMediaIcon fontSize="large" color="primary" />
-                </Badge>
-              </IconButton>
+              {converting_images ? (
+                <>
+                  <IconButton
+                    aria-label={notificationsLabel(100)}
+                    onClick={(e) => {
+                      setis_gallery_open(!is_gallery_open);
+                      setis_upload_open(false);
+                    }}
+                  >
+                    <Badge
+                      badgeContent={converting_images_len}
+                      color="secondary"
+                    >
+                      <PermMediaIcon fontSize="large" color="primary" />
+                    </Badge>
+                  </IconButton>
+                </>
+              ) : (
+                <></>
+              )}
+
               <IconButton
                 aria-label="Add Photos"
                 onClick={(e) => {

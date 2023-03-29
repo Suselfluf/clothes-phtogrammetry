@@ -1,5 +1,10 @@
 from rest_framework import serializers
-from .models import Clothes, CoverImage, Clothes_V2, ImagesToConvert, ArObject
+from .models import Clothes, CoverImage, Clothes_V2, ImagesToConvert, ArObject, TextureImages
+
+class TextureImagesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TextureImages
+        fields = ("__all__")
 
 class ClothesSerializer(serializers.ModelSerializer):
 
@@ -42,6 +47,10 @@ class AugModelSerializer(serializers.ModelSerializer):
             return ConvertingImagesSerializer(aug_model_instances, many=True).data
         else:
             return None
+        
+ 
+    
+
 
 class ClothesV2Serializer(serializers.ModelSerializer):
     aug_model = serializers.SerializerMethodField()
@@ -65,10 +74,6 @@ class ClothesV2Serializer(serializers.ModelSerializer):
             return []
         return CoverImagesSerializer(cover_images, many=True).data
         
-        
-        
-
-
 
 class ImagesToConvertSerializer(serializers.ModelSerializer):
     aug_model_id = serializers.ReadOnlyField(source="aug_model.id")
@@ -89,4 +94,78 @@ class ClothesCoverInfoSerializer(serializers.ModelSerializer):
         model = Clothes_V2
         fields = ('__all__')
         
+class AugmentedObjectFolderSerializer(serializers.Serializer):
+    aug_model = serializers.SerializerMethodField()
+    # converting_images = serializers.SerializerMethodField()
+    class Meta:
+        model = Clothes_V2
+        fields = (['id','title','aug_model'])
+        
+    def get_aug_model(self, obj):
+        try:
+            aug_model_instance = ArObject.objects.get(cloth=obj.id)
+        except ArObject.DoesNotExist:
+            return []
+        return AugModelSerializer(aug_model_instance).data
+    
+    # def get_converting_images(self, obj):
+    #     try:
+    #         aug_model_instance = ArObject.objects.get(cloth=obj.id)
+    #     except  ArObject.DoesNotExist:
+    #         return None 
+    #     else:
+    #         try:
+    #             converting_images = ImagesToConvert.objects.all().filter(aug_model=aug_model_instance.id)
+    #         except TextureImages.DoesNotExist:
+    #             return None
+    #     return TextureImagesSerializer(converting_images, many=True).data
+    
+    def get_converting_images(self, obj):
+        try:
+            aug_model_instance = ArObject.objects.get(cloth=obj.id)
+        except  ArObject.DoesNotExist:
+            return None 
+        else:
+            try:
+                converting_images = ImagesToConvert.objects.all().filter(aug_model=aug_model_instance.id)
+            except TextureImages.DoesNotExist:
+                return None
+        return TextureImagesSerializer(converting_images, many=True).data
+    
+    # def get_converting_images(self, obj):
+    #     try:    
+    #         aug_model_instances = ImagesToConvert.objects.all().filter(aug_model_id=obj.id)
+    #         if aug_model_instances.exists():
+    #             return ConvertingImagesSerializer(aug_model_instances, many=True).data
+    #         else:
+    #             return None
+    #     except ImagesToConvert.DoesNotExist:
+    #         return []
+    
+class WorkshopSerializer(serializers.ModelSerializer):
+    aug_model = serializers.SerializerMethodField()
+    texture = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = Clothes_V2
+        fields = (['id','title','aug_model', 'texture' ])
+        
+    def get_aug_model(self, obj):
+        try:
+            aug_model_instance = ArObject.objects.get(cloth=obj.id)
+        except ArObject.DoesNotExist:
+            return []
+        return AugModelSerializer(aug_model_instance).data
+    
+    def get_texture(self, obj):
+        try:
+            aug_model_instance = ArObject.objects.get(cloth=obj.id)
+        except  ArObject.DoesNotExist:
+            return None 
+        else:
+            try:
+                textures_instance = TextureImages.objects.all().filter(aug_model=aug_model_instance.id)
+            except TextureImages.DoesNotExist:
+                return None
+        return TextureImagesSerializer(textures_instance, many=True).data
     

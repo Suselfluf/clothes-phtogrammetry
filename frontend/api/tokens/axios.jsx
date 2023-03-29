@@ -1,6 +1,9 @@
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const baseURL = "http://127.0.0.1:8000/api/";
+
+const navigate = useNavigate;
 
 const tokenInstance = axios.create({
   baseURL: baseURL,
@@ -29,9 +32,12 @@ tokenInstance.interceptors.response.use(
       );
       return Promise.reject(error);
     }
+    if (error.response.status === 403) {
+      window.location.href = "/login/";
+    }
     if (
       error.response.status === 401 &&
-      originalRequest.url === baseURL + "/admin-auth/token/refresh/"
+      originalRequest.url === baseURL + "admin-auth/token/refresh/"
     ) {
       window.location.href = "/login/";
       return Promise.reject(error);
@@ -46,24 +52,23 @@ tokenInstance.interceptors.response.use(
 
       if (refreshToken) {
         const tokenParts = JSON.parse(atob(refreshToken.split(".")[1]));
-
         // exp date in token is expressed in seconds, while now() returns milliseconds:
         const now = Math.ceil(Date.now() / 1000);
         // console.log(tokenParts.exp);
 
         if (tokenParts.exp > now) {
-          return axiosInstance
-            .post("/admin-auth/token/refresh/", { refresh: refreshToken })
+          return tokenInstance
+            .post("admin-auth/token/refresh/", { refresh: refreshToken }) // Makes refresh token undefined!!
             .then((response) => {
               localStorage.setItem("access_token", response.data.access);
-              localStorage.setItem("refresh_token", response.data.refresh);
+              // localStorage.setItem("refresh_token", response.data.refresh);
 
-              axiosInstance.defaults.headers["Authorization"] =
+              tokenInstance.defaults.headers["Authorization"] =
                 "JWT " + response.data.access;
               originalRequest.headers["Authorization"] =
                 "JWT " + response.data.access;
 
-              return axiosInstance(originalRequest);
+              return tokenInstance(originalRequest);
             })
             .catch((err) => {
               console.log(err);

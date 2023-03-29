@@ -18,13 +18,22 @@ export default function AdminLayout() {
   useEffect(() => {
     return () => {
       cloth_get_list().then((response) => {
-        console.log(response.response.status);
-        if (response.response.status === 401) {
-          set_is_response_forbidden(true);
-          set_is_data_loaded(false);
-        } else {
-          set_clothes_data(response);
-          set_is_data_loaded(true);
+        // console.log(response);
+        set_clothes_data(response);
+        set_is_data_loaded(true);
+        try {
+          if (
+            response.response.status === 401 ||
+            response.response.status === 403
+          ) {
+            set_is_response_forbidden(true);
+            set_is_data_loaded(false);
+          } else {
+            set_clothes_data(response);
+            set_is_data_loaded(true);
+          }
+        } catch (err) {
+          console.log(err);
         }
       });
     };
