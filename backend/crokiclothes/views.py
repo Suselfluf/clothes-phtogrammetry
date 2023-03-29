@@ -1,15 +1,15 @@
 
 from django.shortcuts import render
-
+import pika 
 # Create your views here.
 from rest_framework import viewsets, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.permissions import *
+from .producer import publish
 
 
-# from .producer import publish
 from .serializers import *
 from .models import Clothes, Clothes_V2, CoverImage, ImagesToConvert, ArObject
 from rest_framework.views import APIView
@@ -265,10 +265,42 @@ class AugmentedObjView(APIView):
         # return Response(aug_object_serialized.data, status=status.HTTP_200_OK)
     
     def put(self, request, pk=None):
+        folder_name = request.data.get('folder_name')
+        publish(folder_name)
 
-        aug_object = ArObject.objects.all().filter(cloth=pk)
-        aug_object_serialized = ArObjectSerializer(aug_object,many=True)
-        return Response(aug_object_serialized.data, status=status.HTTP_200_OK)
+        # aug_object = ArObject.objects.all().filter(cloth=pk)
+        # aug_object_serialized = ArObjectSerializer(aug_object,many=True)
+        # return Response(aug_object_serialized.data, status=status.HTTP_200_OK)
+        return Response("None")
+    
+    def post(self, request, pk=None):
+        # Start consuming messages from the message broker queue
+        
+        
+        connection = pika.BlockingConnection(
+                    pika.ConnectionParameters(host='localhost'))
+        channel = connection.channel()
+
+        channel.queue_declare(queue='photogrammetry')
+
+        def callback(channel, method, properties, body):
+            print("Recieved message in photogrammetry queue")
+            print(body)    
+            
+
+
+        channel.basic_consume(queue='photogrammetry', on_message_callback=callback, auto_ack=True)
+
+        print("Started Consuming")
+
+        channel.start_consuming()
+        channel.close()
+
+    def delete(self, request, pk=None):
+        consumer = MessageBrokerConsumer('photogrammetry')
+        res = consumer.process_message()
+        return Response(res)
+
     
    
         

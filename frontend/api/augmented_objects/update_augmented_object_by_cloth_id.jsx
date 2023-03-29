@@ -1,21 +1,28 @@
 import axios from "axios";
 import React from "react";
 import { BACKEND_CLOTHES_URL } from "../../src/const/ulrs";
-
+import tokenInstance from "../tokens/axios";
 export default async function update_augmented_object_by_cloth_id(cloth_id) {
-  var config = {
-    method: "put",
-    maxBodyLength: Infinity,
-    url: `${BACKEND_CLOTHES_URL}/${cloth_id}/augmented-clothes`,
-  };
-
-  const response = await axios(config)
-    .then(function (response) {
-      return response.data;
+  const response = await tokenInstance
+    .put(`clothes-admin/${cloth_id}/augmented-clothes`, {
+      //   access_token: localStorage.getItem("access_token"),
+      folder_name: "folder_name_srting",
+      // wearable_part: wearable_part,
     })
-    .catch(function (error) {
-      return error;
+    .then((res) => {
+      return res.data;
     });
-
   return response;
 }
+
+// export default async function get_augmented_objects(wearable_part) {
+//   const response = await tokenInstance
+//     .put(`clothes-admin/${cloth_id}/augmented-clothes`, {
+//       //   access_token: localStorage.getItem("access_token"),
+//       // wearable_part: wearable_part,
+//     })
+//     .then((res) => {
+//       return res.data;
+//     });
+//   return response;
+// }

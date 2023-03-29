@@ -18,6 +18,7 @@ import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
 import CircularProgress from "@mui/material/CircularProgress";
 import LinearWithValueLabel from "../../Loader/Linear_progress_with_label";
 import update_augmented_object_by_cloth_id from "../../../../api/augmented_objects/update_augmented_object_by_cloth_id";
+import tokenInstance from "../../../../api/tokens/axios";
 
 export default function Photos_Gallery(props) {
   const [layout, set_layout] = useState(props.type);
@@ -59,11 +60,31 @@ export default function Photos_Gallery(props) {
   };
 
   const handleConverting = (event) => {
-    console.log(event);
     set_is_convert_pending(!is_convert_pending);
     update_augmented_object_by_cloth_id(cloth_id).then((res) => {
       console.log(res);
     });
+  };
+
+  const startMQBrokker = async (event) => {
+    // set_is_convert_pending(!is_convert_pending);
+    const response = await tokenInstance
+      .post(`clothes-admin/${4}/augmented-clothes`, {
+        //   access_token: localStorage.getItem("access_token"),
+        folder_name: "folder_name_srting",
+        // wearable_part: wearable_part,
+      })
+      .then((res) => {
+        console.log(res);
+      });
+  };
+
+  const getMessagesFromQueue = async (queue) => {
+    const response2 = await tokenInstance
+      .delete(`clothes-admin/${4}/augmented-clothes`, {})
+      .then((res) => {
+        console.log(res);
+      });
   };
 
   return (
@@ -89,6 +110,8 @@ export default function Photos_Gallery(props) {
                 >
                   Convert into AR Object
                 </Button>
+                <Button onClick={startMQBrokker}>Start Broker</Button>
+                <Button onClick={getMessagesFromQueue}>Get Messages</Button>
               </>
             )}
             {is_convert_pending && <LinearWithValueLabel />}{" "}
