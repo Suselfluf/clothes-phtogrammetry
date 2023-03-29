@@ -166,10 +166,18 @@ class ConvertingImagesForAugObject(APIView):
     parser_classes = (MultiPartParser, FormParser)
     
     def get(self, request, pk=None):
-        # aug_model_id = request.data.get('aug_model')
-        converting_images = ImagesToConvert.objects.all().filter(aug_model=pk)
-        response_converting_images = ConvertingImagesSerializer(converting_images,many=True)
-        return Response(response_converting_images.data, status=status.HTTP_200_OK)
+        try: 
+            # cloth = Clothes_V2.objects.get(id=pk)
+            # aug_object_serialized = AugmentedObjectFolderSerializer(cloth,many=False)
+            # return Response(aug_object_serialized.data, status=status.HTTP_200_OK)
+        
+            converting_images = ImagesToConvert.objects.all().filter(aug_model=pk)
+            response_converting_images = ConvertingImagesSerializer(converting_images,many=True)
+            return Response(response_converting_images.data, status=status.HTTP_200_OK)
+        except ImagesToConvert.DoesNotExist:
+            return None
+        # except Clothes_V2.DoesNotExist:
+        #     return None
         
     def put(self, request, pk=None):
         # folder_name = request.data.get('folder-name')
@@ -245,10 +253,16 @@ class AugmentedObjView(APIView):
     parser_classes = (MultiPartParser, FormParser)
     
     def get(self, request, pk=None):
+        try:
+            cloth = Clothes_V2.objects.get(id=pk)
+            aug_object_serialized = AugmentedObjectFolderSerializer(cloth,many=False)
+            return Response(aug_object_serialized.data, status=status.HTTP_200_OK)
+        except Clothes_V2.DoesNotExist:
+            return None
 
-        aug_object = ArObject.objects.all().filter(cloth=pk)
-        aug_object_serialized = ArObjectSerializer(aug_object,many=True)
-        return Response(aug_object_serialized.data, status=status.HTTP_200_OK)
+        # aug_object = ArObject.objects.all().filter(cloth=pk)
+        # aug_object_serialized = ArObjectSerializer(aug_object,many=True)
+        # return Response(aug_object_serialized.data, status=status.HTTP_200_OK)
     
     def put(self, request, pk=None):
 

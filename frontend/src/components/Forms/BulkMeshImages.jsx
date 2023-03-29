@@ -12,6 +12,7 @@ import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
 import send_images from "../../../api/meshroom/send_images";
 import { SEND_IMAGES_MESHROOM_URL } from "../../const/ulrs";
 import add_converting_images_by_id from "../../../api/converting_images/add_converting_images_by_id";
+import get_augmented_object_by_cloth_id from "../../../api/augmented_objects/get_augmented_object_by_cloth_id";
 
 export default function BulkMeshImagesForm(props) {
   const [bulkImagesArray, addToBulkImages] = useState([]);
@@ -46,6 +47,14 @@ export default function BulkMeshImagesForm(props) {
     add_converting_images_by_id(props.cloth_id, data).then((res) => {
       console.log(res);
       props.handleUpdate(res);
+    });
+
+    get_augmented_object_by_cloth_id(props.cloth_id).then((res) => {
+      console.log("New Aug Object was created");
+      console.log(res.data);
+      // set_mesh_url(res.aug_model.aug_model);
+      // set_mesh_texture_url(res.aug_model.texture);
+      // set_is_mesh_recieved(true);
     });
   };
 

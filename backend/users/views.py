@@ -48,7 +48,6 @@ class IdentifyUser(APIView):
         # print(token.split(' ')[1])
         decoded_token = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
         user_id = decoded_token['user_id']
-        print(user_id)
         user = NewUser.objects.get(id=user_id)
         serializer = UserSerializaer(instance=user)
         
