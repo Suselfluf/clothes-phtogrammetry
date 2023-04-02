@@ -31,5 +31,6 @@ urlpatterns = [
     path('clothes-admin/<str:pk>/coverimages', views.CoverImagesForCloth.as_view()),
     path('clothes-admin/<str:pk>/converting-images', views.ConvertingImagesForAugObject.as_view()),
     path('clothes-admin/<str:pk>/augmented-clothes', views.AugmentedObjView.as_view()),
-    path('clothes-admin/<str:pk>/augmented-clothes/<str:mpk>/textures', views.AugmentedObjView.as_view())
+    path('clothes-admin/<str:pk>/augmented-clothes/<str:mpk>/textures', views.AugmentedObjView.as_view()),
+    path('aug-convert/<str:pk>', views.ConvertingView.as_view())
 ]

@@ -20,14 +20,7 @@ export default function AR_object(props) {
   useEffect(() => {
     return () => {
       props.aug_model.aug_model &&
-        // get_augmented_object_by_cloth_id(cloth_id).then((res) => {
-        //   console.log(res);
-        //   set_mesh_url(res.aug_model.aug_model);
-        //   set_mesh_texture_url(res.aug_model.texture);
-        //   set_is_mesh_recieved(true);
-        // });
         get_augmented_object_by_cloth_id(cloth_id).then((res) => {
-          console.log(res);
           set_mesh_texture_array(res.textures);
           set_mesh_url(res.aug_model.aug_model);
           set_mesh_texture_url(res.aug_model.texture);
