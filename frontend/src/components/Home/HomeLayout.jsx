@@ -14,6 +14,7 @@ export default function HomeLayout() {
   return (
     <>
       {/* <ResponsiveAppBar /> */}
+      <h2>Home page</h2>
       <Routes>
         <Route path="/client" element={<ClientLayout />} />
         <Route path="/admin" element={<AdminLayout />} />

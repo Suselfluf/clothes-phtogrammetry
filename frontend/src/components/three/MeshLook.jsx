@@ -84,6 +84,7 @@ export default function MeshedLook() {
                 buttons_positioning={[0, 1, 0]}
                 text_positioning={[0, 0, 0]}
                 handleMeshChange={handleTopMeshChange}
+                limits={top_mesh_len}
               />
               <Suspense fallback={null}>
                 <TopMeshObject
@@ -105,6 +106,7 @@ export default function MeshedLook() {
                 buttons_positioning={[0, 0.6, 0]}
                 text_positioning={[0, 0, 0]}
                 handleMeshChange={handleBottomMeshChange}
+                limits={bottom_mesh_len}
               />
               <Suspense fallback={null}>
                 <TopMeshObject

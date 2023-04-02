@@ -16,7 +16,7 @@ export default function ThreeControls(props) {
     props.text_positioning
   );
   const [arrowGeometry, setArrowGeometry] = useState(null);
-
+  const [index_limits, set_index_limits] = useState(props.limits);
   const [arrow_geometry, set_arrow_geometry] = useState("");
   const [is_arrow_loaded, set_is_arrow_loaded] = useState(false);
   const gltf_loader = new GLTFLoader();
@@ -24,22 +24,31 @@ export default function ThreeControls(props) {
   //                   text_positioning={[0,1.2,0]}
 
   const next = () => {
-    set_index(index + 1);
-    props.handleMeshChange(index + 1);
+    if (index + 1 <= index_limits - 1) {
+      set_index(index + 1);
+      props.handleMeshChange(index + 1);
+    } else {
+      set_index(0);
+      props.handleMeshChange(0);
+    }
   };
 
   const prev = () => {
-    set_index(index - 1);
-    props.handleMeshChange(index - 1);
+    console.log(index_limits, index);
+    if (index - 1 <= 0) {
+      set_index(index_limits - 1);
+      props.handleMeshChange(index_limits - 1);
+    } else {
+      set_index(index - 1);
+      props.handleMeshChange(index - 1);
+    }
   };
 
   useEffect(() => {
-    return () => {};
+    return () => {
+      console.log(index_limits, index);
+    };
   }, []);
-
-  const handleArrowClick = (event) => {
-    console.log("Working");
-  };
 
   return (
     <>

@@ -108,29 +108,6 @@ class AugmentedObjectFolderSerializer(serializers.Serializer):
             return []
         return AugModelSerializer(aug_model_instance).data
     
-    # def get_converting_images(self, obj):
-    #     try:
-    #         aug_model_instance = ArObject.objects.get(cloth=obj.id)
-    #     except  ArObject.DoesNotExist:
-    #         return None 
-    #     else:
-    #         try:
-    #             converting_images = ImagesToConvert.objects.all().filter(aug_model=aug_model_instance.id)
-    #         except TextureImages.DoesNotExist:
-    #             return None
-    #     return TextureImagesSerializer(converting_images, many=True).data
-    
-    # def get_converting_images(self, obj):
-    #     try:
-    #         aug_model_instance = ArObject.objects.get(cloth=obj.id)
-    #     except  ArObject.DoesNotExist:
-    #         return None 
-    #     else:
-    #         try:
-    #             converting_images = ImagesToConvert.objects.all().filter(aug_model=aug_model_instance.id)
-    #         except ImagesToConvert.DoesNotExist:
-    #             return None
-    #     return ImagesToConvert(converting_images, many=True).data
     
     def get_textures(self, obj):
         try:
@@ -181,3 +158,25 @@ class WorkshopSerializer(serializers.ModelSerializer):
                 return None
         return TextureImagesSerializer(textures_instance, many=True).data
     
+    
+    
+class ConvertingImagesToConvertSerializer(serializers.Serializer):
+    # aug_model = serializers.SerializerMethodField()
+    convertingimages = serializers.SerializerMethodField()
+    class Meta:
+        model = Clothes_V2
+        fields = (['convertingimages'])
+        
+    # def get_aug_model(self, obj):
+    #     try:
+    #         aug_model_instance = ArObject.objects.get(cloth=obj.id)
+    #     except ArObject.DoesNotExist:
+    #         return []
+    #     return AugModelSerializer(aug_model_instance).data
+    
+    def get_convertingimages(self, obj):
+        converting_images_instance = ImagesToConvert.objects.all().filter(aug_model_id=obj.id)
+        if converting_images_instance.exists():
+            return ConvertingImagesSerializer(converting_images_instance, many=True).data
+        else:
+            return None

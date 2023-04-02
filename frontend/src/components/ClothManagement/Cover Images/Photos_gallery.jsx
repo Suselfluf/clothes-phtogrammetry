@@ -69,19 +69,22 @@ export default function Photos_Gallery(props) {
   const startMQBrokker = async (event) => {
     // set_is_convert_pending(!is_convert_pending);
     const response = await tokenInstance
-      .post(`clothes-admin/${4}/augmented-clothes`, {
-        //   access_token: localStorage.getItem("access_token"),
-        folder_name: "folder_name_srting",
+      .post(`aug-convert/${cloth_id}`, {
+        access_token: localStorage.getItem("access_token"),
+        folder_name: "Try 2",
         // wearable_part: wearable_part,
       })
       .then((res) => {
-        console.log(res);
+        console.log(res.data);
       });
+    // .then((res) => {
+    //   console.log(res);
+    // });
   };
 
   const getMessagesFromQueue = async (queue) => {
     const response2 = await tokenInstance
-      .delete(`clothes-admin/${4}/augmented-clothes`, {})
+      .delete(`aug-convert/${cloth_id}`, {})
       .then((res) => {
         console.log(res);
       });

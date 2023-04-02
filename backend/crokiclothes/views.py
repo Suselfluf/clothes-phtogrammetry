@@ -1,6 +1,9 @@
 
+import base64
+import io
 from django.shortcuts import render
-import pika 
+import pika
+import requests
 # Create your views here.
 from rest_framework import viewsets, status
 from rest_framework.views import APIView
@@ -266,40 +269,13 @@ class AugmentedObjView(APIView):
     
     def put(self, request, pk=None):
         folder_name = request.data.get('folder_name')
-        publish(folder_name)
+        # publish(folder_name)
 
         # aug_object = ArObject.objects.all().filter(cloth=pk)
         # aug_object_serialized = ArObjectSerializer(aug_object,many=True)
         # return Response(aug_object_serialized.data, status=status.HTTP_200_OK)
         return Response("None")
     
-    def post(self, request, pk=None):
-        # Start consuming messages from the message broker queue
-        
-        
-        connection = pika.BlockingConnection(
-                    pika.ConnectionParameters(host='localhost'))
-        channel = connection.channel()
-
-        channel.queue_declare(queue='photogrammetry')
-
-        def callback(channel, method, properties, body):
-            print("Recieved message in photogrammetry queue")
-            print(body)    
-            
-
-
-        channel.basic_consume(queue='photogrammetry', on_message_callback=callback, auto_ack=True)
-
-        print("Started Consuming")
-
-        channel.start_consuming()
-        channel.close()
-
-    def delete(self, request, pk=None):
-        consumer = MessageBrokerConsumer('photogrammetry')
-        res = consumer.process_message()
-        return Response(res)
 
     
    
@@ -345,4 +321,73 @@ class WorkshopView(APIView):
     
 #     def get(self, request, pk=None):
 #         pass
-     
+class ConvertingView(APIView):
+    parser_classes = (MultiPartParser, FormParser)
+    permission_classes = (IsAdminUser, )
+    
+    def post(self, request, pk=None):
+        folder_name = request.data.get('folder_name')
+        try:
+            aug_model = ArObject.objects.get(cloth=pk)
+            
+            print(aug_model.id)
+            try:
+                images_to_convert = ImagesToConvert.objects.all().filter(aug_model=aug_model.id)
+                image_files = []
+                for img in images_to_convert:
+                    image_files.append(('files', (img.convertingimages.name, img.convertingimages.file)))
+
+                
+                url = 'http://192.168.1.53:5000/bulkUpload'
+                form_data = {'foldername':folder_name}
+                server = requests.post(url, data=form_data, files=image_files)
+                output = server.text
+                print(output)
+                
+                return Response(output, status=status.HTTP_200_OK)
+            
+            except ImagesToConvert.DoesNotExist:
+                return Response("There is no images to converty")
+        except ArObject.DoesNotExist:
+            return Response("There is no such aug model")
+        
+        
+        # try:
+        #     arobject_entity = ArObject.objects.get(cloth=pk)
+        #     try:
+        #         converting_images_array = ImagesToConvert.objects.all().filter(aug_model=arobject_entity.id)
+        #         converting_images_serializer = ConvertingImagesSerializer(converting_images_array, many=True)
+        #         return Response(converting_images_serializer.data, status=status.HTTP_200_OK)
+        #     except ImagesToConvert.DoesNotExist:
+        #         print("There are no converting images yet")
+        #         return Response(status=status.HTTP_404_NOT_FOUND)
+        # except ArObject.DoesNotExist:
+        #     print("There is no such object")
+        #     return Response(status=status.HTTP_404_NOT_FOUND)
+        
+        # print(request.data)
+        
+                
+        # connection = pika.BlockingConnection(
+        #             pika.ConnectionParameters(host='localhost'))
+        # channel = connection.channel()
+
+        # channel.queue_declare(queue='photogrammetry')
+
+        # def callback(channel, method, properties, body):
+        #     print("Recieved message in photogrammetry queue")
+        #     print(body)    
+
+
+        # channel.basic_consume(queue='photogrammetry', on_message_callback=callback, auto_ack=True)
+
+        # print("Started Consuming")
+
+        # channel.start_consuming()
+        # channel.close()
+
+
+    # def delete(self, request, pk=None):
+    #     consumer = MessageBrokerConsumer('photogrammetry')
+    #     res = consumer.process_message()
+    #     return Response(res)
