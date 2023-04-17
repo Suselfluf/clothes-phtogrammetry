@@ -28,29 +28,28 @@ export default function SignIn() {
 
   useEffect(() => {
     return () => {
-      if (localStorage.getItem("refresh_token")) {
-        console.log("has token");
-        try {
-          tokenInstance
-            .post(`admin-auth/token/verify/`, {
-              token: localStorage.getItem("refresh_token"),
-            })
-            .then((res) => {
-              console.log(res);
-              if (res.status === 200) {
-                Auth.login();
-                // Auth.trylogin(res);
-                if (Auth.isAuthenticated()) {
-                  navigate("/welcome");
-                }
-              }
-            });
-        } catch (error) {
-          console.error(error);
-        }
-      }
-
-      // navigate("/welcome");
+      // if (localStorage.getItem("refresh_token")) {         // Need to be fixed to log in automatically
+      //   try {
+      //     tokenInstance
+      //       .post(`admin-auth/token/verify/`, {
+      //         token: localStorage.getItem("refresh_token"),
+      //       })
+      //       .then((res) => {
+      //         console.log(res);
+      //         if (res.status === 200) {
+      //           console.log("ss");
+      //           localStorage.setItem("is_auth", "True");
+      //           // Auth.login();
+      //           // // Auth.trylogin(res);
+      //           // if (Auth.isAuthenticated()) {
+      //           //   navigate("/welcome");
+      //           // }
+      //         }
+      //       });
+      //   } catch (error) {
+      //     console.error(error);
+      //   }
+      // }
     };
   }, []);
 

@@ -23,6 +23,14 @@ function AdminClothLook(props) {
   //   }
   // );
 
+  const texture1 = useLoader(
+    TextureLoader,
+    `${BACKEND_URL}${props.mesh_texture_array[0].texture_images}`,
+    (loader) => {
+      loader.setCrossOrigin("");
+    }
+  );
+
   useEffect(() => {
     return () => {
       // obj.position.set(-0.8, 1, 0); // Some possitioning issues
@@ -52,9 +60,9 @@ function AdminClothLook(props) {
     }
   );
 
-  // const material1 = new MeshStandardMaterial({
-  //   map: texture1,
-  // });
+  const material1 = new MeshStandardMaterial({
+    map: texture1,
+  });
   // const material2 = new MeshStandardMaterial({
   //   map: texture2,
   // });
@@ -69,8 +77,8 @@ function AdminClothLook(props) {
 
   return (
     <>
-      <mesh geometry={geometry}></mesh>
-      {/* <mesh geometry={geometry} material={combinedMaterial}></mesh> */}
+      {/* <mesh geometry={geometry}></mesh> */}
+      <mesh geometry={geometry} material={material1}></mesh>
     </>
   );
   // return <></>;

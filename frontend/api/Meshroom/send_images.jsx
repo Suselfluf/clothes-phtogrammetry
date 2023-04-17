@@ -4,8 +4,8 @@ import React from "react";
 
 export default async function send_images(url, data, method) {
   var config = {
-    // method: "post",
-    method: method,
+    method: "post",
+    // method: method,
     maxBodyLength: Infinity,
     url: url,
     headers: {

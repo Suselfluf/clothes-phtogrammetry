@@ -71,7 +71,7 @@ export default function Photos_Gallery(props) {
     const response = await tokenInstance
       .post(`aug-convert/${cloth_id}`, {
         access_token: localStorage.getItem("access_token"),
-        folder_name: "Try 2",
+        folder_name: "Cream_Pants",
         // wearable_part: wearable_part,
       })
       .then((res) => {
