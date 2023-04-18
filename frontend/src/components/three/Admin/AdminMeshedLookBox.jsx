@@ -19,9 +19,9 @@ export default function AdminMeshedLookBox(props) {
   const bottomRef = useRef();
   const topRef = useRef();
   const [mesh_url, set_mesh_url] = useState(props.mesh_url);
-  const [mesh_texture_array, set_mesh_texture_array] = useState(
-    props.mesh_texture_array
-  );
+  // const [mesh_texture_array, set_mesh_texture_array] = useState(
+  //   props.mesh_texture_array
+  // );
   const [mesh_texture_url, set_mesh_texture_url] = useState(
     props.mesh_texture_url
   );
@@ -63,7 +63,7 @@ export default function AdminMeshedLookBox(props) {
               <AdminClothLook
                 mesh_url={props.mesh_url}
                 mesh_texture_url={props.mesh_texture_url}
-                mesh_texture_array={props.mesh_texture_array}
+                // mesh_texture_array={props.mesh_texture_array}
                 handleProgress={handleProgress}
               />
             </mesh>

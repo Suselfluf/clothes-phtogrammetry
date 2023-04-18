@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import tokenInstance from "../tokens/axios";
 import React from "react";
 
 export default async function send_images(url, data, method) {
@@ -24,3 +24,5 @@ export default async function send_images(url, data, method) {
 
   return response;
 }
+
+

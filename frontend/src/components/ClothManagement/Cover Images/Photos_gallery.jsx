@@ -59,11 +59,21 @@ export default function Photos_Gallery(props) {
     }
   };
 
-  const handleConverting = (event) => {
-    set_is_convert_pending(!is_convert_pending);
-    update_augmented_object_by_cloth_id(cloth_id).then((res) => {
-      console.log(res);
-    });
+  const handleConverting = async (event) => {
+    // set_is_convert_pending(!is_convert_pending);
+    // update_augmented_object_by_cloth_id(cloth_id).then((res) => {
+    //   console.log(res);
+    // });
+    const response = await tokenInstance
+      .post(`aug-convert/${cloth_id}`, {
+        access_token: localStorage.getItem("access_token"),
+        folder_name: "Purple_Pants",
+        cloth_id: cloth_id,
+        // wearable_part: wearable_part,
+      })
+      .then((res) => {
+        console.log(res.data);
+      });
   };
 
   const startMQBrokker = async (event) => {
@@ -113,8 +123,8 @@ export default function Photos_Gallery(props) {
                 >
                   Convert into AR Object
                 </Button>
-                <Button onClick={startMQBrokker}>Start Broker</Button>
-                <Button onClick={getMessagesFromQueue}>Get Messages</Button>
+                {/* <Button onClick={startMQBrokker}>Start Broker</Button>
+                <Button onClick={getMessagesFromQueue}>Get Messages</Button> */}
               </>
             )}
             {is_convert_pending && <LinearWithValueLabel />}{" "}

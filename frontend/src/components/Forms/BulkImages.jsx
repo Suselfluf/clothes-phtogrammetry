@@ -48,6 +48,7 @@ export default function BulkImagesForm(props) {
       // console.log(res);
       props.handleUpdate(res);
     });
+
   };
 
   return (

@@ -46,6 +46,7 @@ export default function BulkMeshImagesForm(props) {
     }
 
     mesh_data.append("foldername", folderName);
+    mesh_data.append("cloth_id", props.cloth_id);
 
     add_converting_images_by_id(props.cloth_id, data).then((res) => {
       // console.log(res);

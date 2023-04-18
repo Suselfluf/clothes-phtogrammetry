@@ -9,7 +9,7 @@ import { useEffect } from "react";
 
 function AdminClothLook(props) {
   const [progress, set_progress] = useState(0);
-  const [mesh_texture, set_mesh_texture] = useState("");
+  const [mesh_texture, set_mesh_texture] = useState(props.mesh_texture_url);
   const [object, set_object] = useState("");
 
   // const [texture1, texture2] = useLoader(
@@ -25,7 +25,7 @@ function AdminClothLook(props) {
 
   const texture1 = useLoader(
     TextureLoader,
-    `${BACKEND_URL}${props.mesh_texture_array[0].texture_images}`,
+    `${BACKEND_URL}${props.mesh_texture_url}`,
     (loader) => {
       loader.setCrossOrigin("");
     }
@@ -34,7 +34,7 @@ function AdminClothLook(props) {
   useEffect(() => {
     return () => {
       // obj.position.set(-0.8, 1, 0); // Some possitioning issues
-      console.log(props.mesh_texture_array);
+      console.log(props.mesh_texture_url);
     };
   }, []);
 

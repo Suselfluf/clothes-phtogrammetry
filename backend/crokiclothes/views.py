@@ -1,4 +1,4 @@
-import os
+
 from django.shortcuts import render
 import requests
 # Create your views here.
@@ -243,20 +243,11 @@ class ConvertingImagesForAugObject(APIView):
         aug_model_id = request.data.get('aug_model')
         convering_image_id = request.data.get('id')
         converting_image = ImagesToConvert.objects.get(id=convering_image_id)
-        converting_image_path = str(converting_image.convertingimages.path)
-        print(converting_image_path)
-        if os.path.exists(converting_image_path):
-            os.remove(converting_image_path)
-            converting_image.delete()
-            rest_converting_images = ImagesToConvert.objects.all().filter(aug_model=aug_model_id)
-            serializer = ConvertingImagesSerializer(rest_converting_images,many=True)
-    
-            return Response(serializer.data)
-        else:
-            print("File doens't exist")
-            return Response("File does not exist")
+        converting_image.delete()
+        rest_converting_images = ImagesToConvert.objects.all().filter(aug_model=aug_model_id)
+        serializer = ConvertingImagesSerializer(rest_converting_images,many=True)
         
-            
+        return Response(serializer.data)
 
 class AugmentedObjView(APIView):
     parser_classes = (MultiPartParser, FormParser)
@@ -282,21 +273,25 @@ class AugmentedObjView(APIView):
         # return Response(aug_object_serialized.data, status=status.HTTP_200_OK)
         return Response("None")
     
-    def post(self, request, pk=None):
-        # url = 'http://192.168.0.108:5000/get_mesh' ## PC  
-        # server = requests.get(url)
-        # print(server.data)
+    def post (self, request, pk=None):
         print("Has recieved smth")
-        # print(request.data)
-        mesh_obj = request.data.get('texturedMesh.obj')
+        mesh_obj = request.data.get("texturedMesh.obj")
+        texture = request.data.get("texture_1001.png")
+        cloth_id = request.data.get("cloth")
         print(mesh_obj)
-        # serializer = ArObjectSerializer(data=mesh_obj)
-        # if (serializer.is_valid(raise_exception=True)):
-        #     serializer.save()
-        #     print("instance saved")
-        # else:    
-        #     print("failed to save object")
-        return Response("recieved")
+        print(cloth_id)
+        print(texture)
+
+        cloth_data = {"cloth":cloth_id, "aug_model":mesh_obj, "texture":texture }
+        ar_object = ArObject.objects.get(cloth=cloth_id)
+        serializer = ArObjectSerializer(instance=ar_object, data=cloth_data)
+        if (serializer.is_valid(raise_exception=True)):
+            serializer.save()
+            print("saved")
+        else:
+            print("Failed to serialize")
+    
+        return Response("Recieved")
     
 
     
@@ -343,75 +338,36 @@ class WorkshopView(APIView):
     
 #     def get(self, request, pk=None):
 #         pass
-class ConvertingView(APIView):
+class ConvertingView(APIView):  ## Sending images to MEshroom server 
     parser_classes = (MultiPartParser, FormParser)
     permission_classes = (IsAdminUser, )
-    print("Sending images method has started")
     
     def post(self, request, pk=None):
         folder_name = request.data.get('folder_name')
-        try:
-            aug_model = ArObject.objects.get(cloth=pk)
-            try:
-                images_to_convert = ImagesToConvert.objects.all().filter(aug_model=aug_model.id)
-                image_files = []
-                for img in images_to_convert:
-                    image_files.append(('files', (img.convertingimages.name, img.convertingimages.file)))
+        folder_name = request.data.get('cloth_id')
 
-                
-                # url = 'http://192.168.0.101:5000/bulkUpload' ## Laptop
-                url = 'http://192.168.0.108:5000/bulkUpload' ## PC
-
-                
-                form_data = {'foldername':folder_name}
-                server = requests.post(url, data=form_data, files=image_files)
-                output = server.text
-                # print(output)
-                
-                return Response(output, status=status.HTTP_200_OK)
-            
-            except ImagesToConvert.DoesNotExist:
-                return Response("There is no images to converty")
-        except ArObject.DoesNotExist:
-            return Response("There is no such aug model")
-        
-        
         # try:
-        #     arobject_entity = ArObject.objects.get(cloth=pk)
+        #     aug_model = ArObject.objects.get(cloth=pk)
+        #     print(aug_model.id)
         #     try:
-        #         converting_images_array = ImagesToConvert.objects.all().filter(aug_model=arobject_entity.id)
-        #         converting_images_serializer = ConvertingImagesSerializer(converting_images_array, many=True)
-        #         return Response(converting_images_serializer.data, status=status.HTTP_200_OK)
-        #     except ImagesToConvert.DoesNotExist:
-        #         print("There are no converting images yet")
-        #         return Response(status=status.HTTP_404_NOT_FOUND)
-        # except ArObject.DoesNotExist:
-        #     print("There is no such object")
-        #     return Response(status=status.HTTP_404_NOT_FOUND)
-        
-        # print(request.data)
-        
+        #         images_to_convert = ImagesToConvert.objects.all().filter(aug_model=aug_model.id)
+        #         image_files = []
+        #         for img in images_to_convert:
+        #             image_files.append(('files', (img.convertingimages.name, img.convertingimages.file)))
+
                 
-        # connection = pika.BlockingConnection(
-        #             pika.ConnectionParameters(host='localhost'))
-        # channel = connection.channel()
-
-        # channel.queue_declare(queue='photogrammetry')
-
-        # def callback(channel, method, properties, body):
-        #     print("Recieved message in photogrammetry queue")
-        #     print(body)    
-
-
-        # channel.basic_consume(queue='photogrammetry', on_message_callback=callback, auto_ack=True)
-
-        # print("Started Consuming")
-
-        # channel.start_consuming()
-        # channel.close()
-
-
-    # def delete(self, request, pk=None):
-    #     consumer = MessageBrokerConsumer('photogrammetry')
-    #     res = consumer.process_message()
-    #     return Response(res)
+        #         url = 'http://192.168.0.108:5000/bulkUpload'
+        #         form_data = {'foldername':folder_name}
+        #         server = requests.post(url, data=form_data, files=image_files)
+        #         output = server.text
+        #         print(output)
+                
+        #         return Response(output, status=status.HTTP_200_OK)
+            
+        #     except ImagesToConvert.DoesNotExist:
+        #         return Response("There is no images to converty")
+        # except ArObject.DoesNotExist:
+        #     return Response("There is no such aug model")
+        print(request.data)
+        return Response("Recieved")
+    
