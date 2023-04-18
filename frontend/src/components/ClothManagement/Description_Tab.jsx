@@ -160,7 +160,7 @@ export default function Description_Tab(props) {
                     margin={"dense"}
                   />
                 </Typography>
-                <SelectTextFields
+                <SelectTextFields wearable_part={wearable_part}
                   values={[
                     {
                       value: "FULL",

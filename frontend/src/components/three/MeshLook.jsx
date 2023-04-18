@@ -38,21 +38,17 @@ export default function MeshedLook() {
     console.log("Getting top mesh line...");
     wearable_part === "TOP" &&
       get_augmented_objects(wearable_part).then((res) => {
-        console.log(res);
         set_top_mesh_line(res);
         set_top_mesh_len(res.length);
         setIsTopVisible(true);
       });
     wearable_part === "BM" &&
       get_augmented_objects(wearable_part).then((res) => {
-        console.log(res);
         set_bottom_mesh_line(res);
         set_bottom_mesh_len(res.length);
         setIsBottomVisible(true);
       });
   };
-
-  const not_empty = () => {};
 
   const handleProgress = (progress) => {
     // console.log(progress);
@@ -78,7 +74,7 @@ export default function MeshedLook() {
       >
         <Stage environment={"city"} intensity={0.6}>
           {isTopVisible ? (
-            <mesh ref={topRef} position={[0, 5.5, 0]}>
+            <mesh ref={topRef} position={[0, 5.3, 0]}>
               <ThreeControls
                 index={top_current}
                 buttons_positioning={[0, 1, 0]}
