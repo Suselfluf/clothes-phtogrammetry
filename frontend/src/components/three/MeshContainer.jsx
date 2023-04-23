@@ -15,7 +15,7 @@ export default class MeshContainer extends React.Component {
   render() {
     return (
       <>
-        <Container sx={{ height: "100vh", width: "100vw" }}>
+        <Container sx={{ height: "100vh", width: "90vw", padding: "0px" }}>
           {/* <div className="mesh-container-wrapper"> */}
           <Canvas>
             <color attach="background" args={["#101010"]} />

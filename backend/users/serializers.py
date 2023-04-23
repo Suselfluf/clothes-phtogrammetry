@@ -16,7 +16,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
-        print("Create function was called")
+        # print("Create function was called")
         password = validated_data.pop('password', None)
         # as long as the fields are the same, we can just use this
         instance = self.Meta.model(**validated_data)

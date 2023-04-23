@@ -1,7 +1,9 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { BACKEND_URL } from "../../src/const/ulrs";
+// const baseURL = "http://127.0.0.1:8000/api/";
 
-const baseURL = "http://127.0.0.1:8000/api/";
+const baseURL = BACKEND_URL + "/api/";
 
 const navigate = useNavigate;
 
@@ -75,11 +77,13 @@ tokenInstance.interceptors.response.use(
             });
         } else {
           console.log("Refresh token is expired", tokenParts.exp, now);
-          window.location.href = "/login/";
+          localStorage.setItem("is_auth", "false");
+          // window.location.href = "/login/";
         }
       } else {
         console.log("Refresh token not available.");
-        window.location.href = "/login/";
+        localStorage.setItem("is_auth", "false");
+        // window.location.href = "/login/";
       }
     }
 

@@ -9,7 +9,7 @@ import { useEffect } from "react";
 
 function AdminClothLook(props) {
   const [progress, set_progress] = useState(0);
-  const [mesh_texture, set_mesh_texture] = useState("");
+  const [mesh_texture, set_mesh_texture] = useState(props.mesh_texture_url);
   const [object, set_object] = useState("");
 
   // const [texture1, texture2] = useLoader(
@@ -23,10 +23,18 @@ function AdminClothLook(props) {
   //   }
   // );
 
+  const texture1 = useLoader(
+    TextureLoader,
+    `${BACKEND_URL}${props.mesh_texture_url}`,
+    (loader) => {
+      loader.setCrossOrigin("");
+    }
+  );
+
   useEffect(() => {
     return () => {
       // obj.position.set(-0.8, 1, 0); // Some possitioning issues
-      console.log(props.mesh_texture_array);
+      console.log(props.mesh_texture_url);
     };
   }, []);
 
@@ -52,9 +60,9 @@ function AdminClothLook(props) {
     }
   );
 
-  // const material1 = new MeshStandardMaterial({
-  //   map: texture1,
-  // });
+  const material1 = new MeshStandardMaterial({
+    map: texture1,
+  });
   // const material2 = new MeshStandardMaterial({
   //   map: texture2,
   // });
@@ -69,8 +77,8 @@ function AdminClothLook(props) {
 
   return (
     <>
-      <mesh geometry={geometry}></mesh>
-      {/* <mesh geometry={geometry} material={combinedMaterial}></mesh> */}
+      {/* <mesh geometry={geometry}></mesh> */}
+      <mesh geometry={geometry} material={material1}></mesh>
     </>
   );
   // return <></>;

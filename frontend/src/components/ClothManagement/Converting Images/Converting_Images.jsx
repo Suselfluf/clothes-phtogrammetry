@@ -7,12 +7,11 @@ import IconButton from "@mui/material/IconButton";
 import Badge from "@mui/material/Badge";
 import PermMediaIcon from "@mui/icons-material/PermMedia";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
-import DeleteIcon from "@mui/icons-material/Delete";
 import AlertDialogSlide from "../../Alert";
 import Photos_Gallery from "../Cover Images/Photos_gallery";
 import BulkMeshImagesForm from "../../Forms/BulkMeshImages";
 import { BACKEND_CLOTHES_URL, MESHROOM_URL } from "../../../const/ulrs";
-
+import delete_all_converting_images from "../../../../api/converting_images/delete_all_converting_images";
 export default function Converting_Images(props) {
   const [converting_images, set_converting_images] = useState(
     props.converting_images // Needs validation
@@ -41,6 +40,7 @@ export default function Converting_Images(props) {
 
   const remove_all_images = () => {
     console.log("Removed");
+    delete_all_converting_images({ id: "all" });
   };
 
   function notificationsLabel(count) {

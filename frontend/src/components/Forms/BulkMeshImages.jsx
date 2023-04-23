@@ -16,7 +16,9 @@ import get_augmented_object_by_cloth_id from "../../../api/augmented_objects/get
 
 export default function BulkMeshImagesForm(props) {
   const [bulkImagesArray, addToBulkImages] = useState([]);
-  const [folderName, setUpFolderName] = useState("Folder Name");
+  const [folderName, setUpFolderName] = useState(
+    "Converting_for_" + props.cloth_id
+  );
 
   const [method, set_method] = useState(props.method);
   const [layout, set_layout] = useState(props.variant);
@@ -34,19 +36,26 @@ export default function BulkMeshImagesForm(props) {
 
   const handleBulkSubmit = (e) => {
     const data = new FormData();
+    const mesh_data = new FormData();
+
     data.append("aug_model", props.aug_model_id);
+
     for (const file of bulkImagesArray) {
       data.append("convertingimages", file);
+      mesh_data.append("files", file);
     }
-    // data.append("folder-name", folderName);
 
-    // send_images(SEND_IMAGES_MESHROOM_URL, data, method).then((res) => {
-    //   // console.log(res);
-    //   props.handleUpdate(res);
-    // });
+    mesh_data.append("foldername", folderName);
+    mesh_data.append("cloth_id", props.cloth_id);
+
     add_converting_images_by_id(props.cloth_id, data).then((res) => {
-      console.log(res);
+      // console.log(res);
       props.handleUpdate(res);
+    });
+
+    send_images(SEND_IMAGES_MESHROOM_URL, mesh_data, "post").then((res) => {
+      console.log(res);
+      // props.handleUpdate(res);
     });
 
     get_augmented_object_by_cloth_id(props.cloth_id).then((res) => {
