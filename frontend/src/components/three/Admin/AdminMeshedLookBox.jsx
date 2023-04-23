@@ -1,19 +1,11 @@
 import {
   PresentationControls,
   Stage,
-  MeshReflectorMaterial,
 } from "@react-three/drei";
-import { MeshStandardMaterial } from "three";
 import { useEffect, useState, React, Suspense, useRef } from "react";
-import axios from "axios";
+
 import AdminClothLook from "../Clothes/AdminClothLook";
-import { Mesh } from "three";
-import { ObjectLoader } from "three";
-import { useLoader } from "@react-three/fiber";
-import BottomPartMesh from "../Clothes/BottomPartMesh";
-import { TextureLoader } from "three";
-import SetUpTextures from "../Textures/SetUpTextures";
-import { BACKEND_URL } from "../../../const/ulrs";
+
 
 export default function AdminMeshedLookBox(props) {
   const bottomRef = useRef();
@@ -49,7 +41,7 @@ export default function AdminMeshedLookBox(props) {
         zoom={0.7}
         polar={[-0.1, Math.PI / 4]}
       >
-        <Stage environment={"city"} intensity={0.6}>
+        <Stage environment={"city"} intensity={0.1}>
           <Suspense // Needed to be reworked to handle the gap while loading the object
             fallback={
               // <mesh position={props.position} rotation={props.rotation}>
@@ -66,6 +58,7 @@ export default function AdminMeshedLookBox(props) {
                 // mesh_texture_array={props.mesh_texture_array}
                 handleProgress={handleProgress}
               />
+              
             </mesh>
           </Suspense>
         </Stage>

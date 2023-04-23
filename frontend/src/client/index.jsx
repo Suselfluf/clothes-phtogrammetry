@@ -14,7 +14,7 @@ export default function ClientLayout() {
   useEffect(() => {
     return () => {
       get_user_data().then((response) => {
-        console.log(response);
+       
         set_user_name(response.user_name);
         set_is_loaded(!is_loaded);
       });
@@ -28,10 +28,7 @@ export default function ClientLayout() {
     <>
       {/* <ResponsiveAppBar /> */}
       <Container>
-        <Box>
-          <Typography>Welcome {is_loaded ? user_name : "User"}</Typography>
-          <Button onClick={send_request}>Get user data</Button>
-        </Box>
+        
         {is_loaded ? (
           <>
             <MeshContainer />

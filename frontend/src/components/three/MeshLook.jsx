@@ -35,7 +35,6 @@ export default function MeshedLook() {
   }, []);
 
   const get_mesh_line = (wearable_part) => {
-    console.log("Getting top mesh line...");
     wearable_part === "TOP" &&
       get_augmented_objects(wearable_part).then((res) => {
         set_top_mesh_line(res);
@@ -44,9 +43,16 @@ export default function MeshedLook() {
       });
     wearable_part === "BM" &&
       get_augmented_objects(wearable_part).then((res) => {
-        set_bottom_mesh_line(res);
-        set_bottom_mesh_len(res.length);
-        setIsBottomVisible(true);
+        console.log(res)
+        if(res.length > 0){
+          set_bottom_mesh_line(res);
+          set_bottom_mesh_len(res.length);
+          setIsBottomVisible(true);
+        }
+        else{
+          setIsBottomVisible(false);
+        }
+        
       });
   };
 
@@ -72,13 +78,14 @@ export default function MeshedLook() {
         zoom={0.5}
         polar={[-0.1, Math.PI / 4]}
       >
-        <Stage environment={"city"} intensity={0.6}>
+        <Stage environment={"city"} intensity={0.1}>
           {isTopVisible ? (
-            <mesh ref={topRef} position={[0, 5.3, 0]}>
+            <mesh ref={topRef} position={[0, 6.3, 0]}>
               <ThreeControls
                 index={top_current}
-                buttons_positioning={[0, 1, 0]}
-                text_positioning={[0, 0, 0]}
+                title={top_mesh_line[top_current].title}
+                buttons_positioning={[0, 0.7, 0]}
+                text_positioning={[0, 0.7, 0]}
                 handleMeshChange={handleTopMeshChange}
                 limits={top_mesh_len}
               />
@@ -96,11 +103,12 @@ export default function MeshedLook() {
             <></>
           )}
           {isBottomVisible ? (
-            <mesh ref={bottomRef} position={[0, 4, 0]}>
+            <mesh ref={bottomRef} position={[0, 5, 0]}>
               <ThreeControls
                 index={bottom_current}
                 buttons_positioning={[0, 0.6, 0]}
-                text_positioning={[0, 0, 0]}
+                title={bottom_mesh_line[bottom_current].title}
+                text_positioning={[0, -0.1, 0]}
                 handleMeshChange={handleBottomMeshChange}
                 limits={bottom_mesh_len}
               />

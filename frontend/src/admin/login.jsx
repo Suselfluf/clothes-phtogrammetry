@@ -19,6 +19,14 @@ import {
 import Auth from "../components/Auth/Auth";
 import ResponsiveAppBar from "../components/AppBar";
 
+
+import { VRButton, ARButton, XR, Controllers, Hands } from '@react-three/xr'
+import { Canvas } from '@react-three/fiber'
+import { XRButton } from '@react-three/xr'
+import { WebGLRenderer } from 'three'
+
+
+
 export default function SignIn() {
   const navigate = useNavigate();
   const initialFormData = Object.freeze({
@@ -85,6 +93,7 @@ export default function SignIn() {
   return (
     <>
       {/* <ResponsiveAppBar></ResponsiveAppBar> */}
+      
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <div>
@@ -148,3 +157,6 @@ export default function SignIn() {
     </>
   );
 }
+
+
+

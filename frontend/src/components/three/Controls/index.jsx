@@ -34,7 +34,7 @@ export default function ThreeControls(props) {
   };
 
   const prev = () => {
-    console.log(index_limits, index);
+    
     if (index - 1 <= 0) {
       set_index(index_limits - 1);
       props.handleMeshChange(index_limits - 1);
@@ -46,15 +46,16 @@ export default function ThreeControls(props) {
 
   useEffect(() => {
     return () => {
-      console.log(index_limits, index);
+      console.log(props.title);
     };
   }, []);
 
   return (
     <>
       <mesh position={text_positioning}>
-        <Text fontSize={0.5}>
-          {index}
+        <Text fontSize={0.2}>
+          {/* {index} */}
+          {props.title}
           {/* <meshNormalMaterial /> */}
         </Text>
       </mesh>

@@ -11,6 +11,7 @@ import Description_Tab from "./Description_Tab";
 import cloth_get_by_id from "../../../api/cloth/cloth_get_single";
 import Loader from "../Loader";
 
+
 export default function CenteredTabs() {
   const location = useLocation();
   const [value, setValue] = useState(0);
@@ -46,6 +47,7 @@ export default function CenteredTabs() {
           <Tab label="Description" />
           <Tab label="Images Folder" />
           <Tab label="AR Object" />
+          
         </Tabs>
       </Box>
       {is_data_loaded ? (
@@ -62,6 +64,7 @@ export default function CenteredTabs() {
               aug_model={aug_model}
             ></ARObject_Tab>
           )}
+          
         </>
       ) : (
         <>
@@ -71,3 +74,4 @@ export default function CenteredTabs() {
     </>
   );
 }
+ 
