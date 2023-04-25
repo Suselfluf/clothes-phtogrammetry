@@ -7,32 +7,28 @@ import IconButton from "@mui/material/IconButton";
 import Badge from "@mui/material/Badge";
 import PermMediaIcon from "@mui/icons-material/PermMedia";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
-import DeleteIcon from "@mui/icons-material/Delete";
 import AlertDialogSlide from "../../Alert";
 import Photos_Gallery from "../Cover Images/Photos_gallery";
 import BulkMeshImagesForm from "../../Forms/BulkMeshImages";
 import { BACKEND_CLOTHES_URL, MESHROOM_URL } from "../../../const/ulrs";
-
+import delete_all_converting_images from "../../../../api/converting_images/delete_all_converting_images";
 export default function Converting_Images(props) {
   const [converting_images, set_converting_images] = useState(
-    [] // Needs validation
+    props.converting_images // Needs validation
   );
+  const [has_aug_model, set_has_model] = useState(false);
   const [converting_images_len, set_converting_images_len] = useState(
-    0 // needs validation
+    props.converting_images_len // needs validation
   );
   const [is_upload_open, setis_upload_open] = useState(false);
   const [is_gallery_open, setis_gallery_open] = useState(false);
   const [is_data_loaded, set_is_data_loaded] = useState(false);
 
   useEffect(() => {
-    try {
-      set_converting_images(props.data.aug_model.converting_images);
-      set_converting_images_len(props.data.aug_model.converting_images.length);
-    } catch (error) {
-      console.log(error);
-      set_converting_images([]);
-    }
+    // console.log(converting_images);
     return () => {
+      // console.log(props.aug_model);
+      // props.aug_model ? console.log(props.aug_model) : console.log("No model");
       set_is_data_loaded(true);
     };
   }, []);
@@ -44,6 +40,7 @@ export default function Converting_Images(props) {
 
   const remove_all_images = () => {
     console.log("Removed");
+    delete_all_converting_images({ id: "all" });
   };
 
   function notificationsLabel(count) {
@@ -70,17 +67,27 @@ export default function Converting_Images(props) {
         {is_data_loaded ? (
           <>
             <Box sx={{ display: "flex", justifyContent: "space-evenly" }}>
-              <IconButton
-                aria-label={notificationsLabel(100)}
-                onClick={(e) => {
-                  setis_gallery_open(!is_gallery_open);
-                  setis_upload_open(false);
-                }}
-              >
-                <Badge badgeContent={converting_images_len} color="secondary">
-                  <PermMediaIcon fontSize="large" color="primary" />
-                </Badge>
-              </IconButton>
+              {converting_images ? (
+                <>
+                  <IconButton
+                    aria-label={notificationsLabel(100)}
+                    onClick={(e) => {
+                      setis_gallery_open(!is_gallery_open);
+                      setis_upload_open(false);
+                    }}
+                  >
+                    <Badge
+                      badgeContent={converting_images_len}
+                      color="secondary"
+                    >
+                      <PermMediaIcon fontSize="large" color="primary" />
+                    </Badge>
+                  </IconButton>
+                </>
+              ) : (
+                <></>
+              )}
+
               <IconButton
                 aria-label="Add Photos"
                 onClick={(e) => {
@@ -110,9 +117,10 @@ export default function Converting_Images(props) {
         {is_gallery_open ? (
           <>
             <Photos_Gallery
-              type={"cover_images"}
+              type={"converting_images"}
               images={converting_images}
               cloth_id={props.data.id}
+              aug_model_id={props.data.aug_model.id}
               update_image_list={set_converting_images}
               handleUpdate={handleConvertingIamgesUpdate}
             />

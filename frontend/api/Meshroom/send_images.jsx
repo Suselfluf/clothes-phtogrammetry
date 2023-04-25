@@ -1,11 +1,11 @@
 import axios from "axios";
-
+import tokenInstance from "../tokens/axios";
 import React from "react";
 
 export default async function send_images(url, data, method) {
   var config = {
-    // method: "post",
-    method: method,
+    method: "post",
+    // method: method,
     maxBodyLength: Infinity,
     url: url,
     headers: {
@@ -24,3 +24,5 @@ export default async function send_images(url, data, method) {
 
   return response;
 }
+
+

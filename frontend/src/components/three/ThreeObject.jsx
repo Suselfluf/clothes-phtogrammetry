@@ -13,15 +13,15 @@ function ThreeObject(props) {
   const [isLoaded, setIsLoaded] = useState(false);
 
   const recieveCloth = async (e) => {
-    let url =
-      "http://localhost:8000/media/AugModels/Cloth/trimed_black_coat.obj";
-    axios
-      .get(url)
-      .then((res) => {
-        setobjectJSON(res.data);
-      })
-      .catch((err) => console.log(err));
-  };
+  //   let url =
+  //     "http://localhost:8000/media/AugModels/Cloth/trimed_black_coat.obj";
+  //   axios
+  //     .get(url)
+  //     .then((res) => {
+  //       setobjectJSON(res.data);
+  //     })
+  //     .catch((err) => console.log(err));
+  // };
 
   const showElements = () => {
     setIsLoaded(true);

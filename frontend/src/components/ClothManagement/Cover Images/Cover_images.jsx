@@ -10,7 +10,7 @@ import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AlertDialogSlide from "../../Alert";
 import Photos_Gallery from "./Photos_gallery";
-import { BACKEND_CLOTHES_URL, MESHROOM_URL } from "../../../const/ulrs";
+import { BACKEND_CLOTHES_URL } from "../../../const/ulrs";
 import get_cloth_coverimages from "../../../../api/cloth_coverimages/get_cloth_coverimages";
 
 export default function Cover_images(props) {
@@ -34,7 +34,6 @@ export default function Cover_images(props) {
 
   const handleCoverIamgesUpdate = (e) => {
     set_cover_images(e);
-
     set_cover_images_len(e.length);
   };
 

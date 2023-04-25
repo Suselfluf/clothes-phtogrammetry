@@ -19,7 +19,8 @@ import {
 } from "@mui/material";
 import SelectTextFields from "../Selectors/select-input";
 import update_cloth_by_id from "../../../api/update_cloth/update_cloth";
-import { BACKEND_URL } from "../../const/ulrs";
+import { BACKEND_URL, BACKEND_CLOTHES_URL } from "../../const/ulrs";
+import get_cloth_coverimages from "../../../api/cloth_coverimages/get_cloth_coverimages";
 
 export default function Description_Tab(props) {
   const [title, setTitle] = useState(props.context.title);
@@ -40,12 +41,16 @@ export default function Description_Tab(props) {
 
   useEffect(() => {
     return () => {
-      try {
-        set_cover_image(props.context.cover_images[0].coverimages);
-      } catch (error) {
-        // console.log(error);
-        set_cover_image([]);
-      }
+      get_cloth_coverimages(BACKEND_CLOTHES_URL + `/${id}/coverimages`).then(
+        (res) => {
+          try {
+            set_cover_image(res[0].coverimages);
+          } catch (error) {
+            // console.log(error);
+            set_cover_image([]);
+          }
+        }
+      );
     };
   }, []);
 
@@ -155,7 +160,7 @@ export default function Description_Tab(props) {
                     margin={"dense"}
                   />
                 </Typography>
-                <SelectTextFields
+                <SelectTextFields wearable_part={wearable_part}
                   values={[
                     {
                       value: "FULL",

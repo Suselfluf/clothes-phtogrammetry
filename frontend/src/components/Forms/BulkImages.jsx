@@ -9,7 +9,7 @@ import { Tooltip, Button } from "@mui/material";
 import PublishIcon from "@mui/icons-material/Publish";
 import TextField from "@mui/material/TextField";
 import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
-import send_images from "../../../api/Meshroom/send_images";
+import send_images from "../../../api/meshroom/send_images";
 
 export default function BulkImagesForm(props) {
   const [bulkImagesArray, addToBulkImages] = useState([]);
@@ -36,7 +36,7 @@ export default function BulkImagesForm(props) {
       for (const file of bulkImagesArray) {
         data.append("files", file);
       }
-      data.append("folder-name", folderName);
+      data.append("foldername", folderName);
     } else {
       for (const file of bulkImagesArray) {
         data.append("coverimages", file);
@@ -48,6 +48,7 @@ export default function BulkImagesForm(props) {
       // console.log(res);
       props.handleUpdate(res);
     });
+
   };
 
   return (

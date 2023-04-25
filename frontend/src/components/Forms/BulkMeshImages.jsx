@@ -9,13 +9,16 @@ import { Tooltip, Button } from "@mui/material";
 import PublishIcon from "@mui/icons-material/Publish";
 import TextField from "@mui/material/TextField";
 import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
-import send_images from "../../../api/Meshroom/send_images";
+import send_images from "../../../api/meshroom/send_images";
 import { SEND_IMAGES_MESHROOM_URL } from "../../const/ulrs";
 import add_converting_images_by_id from "../../../api/converting_images/add_converting_images_by_id";
+import get_augmented_object_by_cloth_id from "../../../api/augmented_objects/get_augmented_object_by_cloth_id";
 
 export default function BulkMeshImagesForm(props) {
   const [bulkImagesArray, addToBulkImages] = useState([]);
-  const [folderName, setUpFolderName] = useState("Folder Name");
+  const [folderName, setUpFolderName] = useState(
+    "Converting_for_" + props.cloth_id
+  );
 
   const [method, set_method] = useState(props.method);
   const [layout, set_layout] = useState(props.variant);
@@ -33,18 +36,34 @@ export default function BulkMeshImagesForm(props) {
 
   const handleBulkSubmit = (e) => {
     const data = new FormData();
+    const mesh_data = new FormData();
+
     data.append("aug_model", props.aug_model_id);
+
     for (const file of bulkImagesArray) {
       data.append("convertingimages", file);
+      mesh_data.append("files", file);
     }
-    // data.append("folder-name", folderName);
 
-    // send_images(SEND_IMAGES_MESHROOM_URL, data, method).then((res) => {
-    //   // console.log(res);
-    //   props.handleUpdate(res);
-    // });
+    mesh_data.append("foldername", folderName);
+    mesh_data.append("cloth_id", props.cloth_id);
+
     add_converting_images_by_id(props.cloth_id, data).then((res) => {
+      // console.log(res);
+      props.handleUpdate(res);
+    });
+
+    send_images(SEND_IMAGES_MESHROOM_URL, mesh_data, "post").then((res) => {
       console.log(res);
+      // props.handleUpdate(res);
+    });
+
+    get_augmented_object_by_cloth_id(props.cloth_id).then((res) => {
+      console.log("New Aug Object was created");
+      console.log(res.data);
+      // set_mesh_url(res.aug_model.aug_model);
+      // set_mesh_texture_url(res.aug_model.texture);
+      // set_is_mesh_recieved(true);
     });
   };
 
