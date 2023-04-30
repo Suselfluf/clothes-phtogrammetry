@@ -346,28 +346,28 @@ class ConvertingView(APIView):  ## Sending images to MEshroom server
         folder_name = request.data.get('folder_name')
         folder_name = request.data.get('cloth_id')
 
-        # try:
-        #     aug_model = ArObject.objects.get(cloth=pk)
-        #     print(aug_model.id)
-        #     try:
-        #         images_to_convert = ImagesToConvert.objects.all().filter(aug_model=aug_model.id)
-        #         image_files = []
-        #         for img in images_to_convert:
-        #             image_files.append(('files', (img.convertingimages.name, img.convertingimages.file)))
+        try:
+            aug_model = ArObject.objects.get(cloth=pk)
+            print(aug_model.id)
+            try:
+                images_to_convert = ImagesToConvert.objects.all().filter(aug_model=aug_model.id)
+                image_files = []
+                for img in images_to_convert:
+                    image_files.append(('files', (img.convertingimages.name, img.convertingimages.file)))
 
                 
-        #         url = 'http://192.168.0.108:5000/bulkUpload'
-        #         form_data = {'foldername':folder_name}
-        #         server = requests.post(url, data=form_data, files=image_files)
-        #         output = server.text
-        #         print(output)
+                url = 'http://192.168.0.108:5000/bulkUpload'
+                form_data = {'foldername':folder_name}
+                server = requests.post(url, data=form_data, files=image_files)
+                output = server.text
+                print(output)
                 
-        #         return Response(output, status=status.HTTP_200_OK)
+                return Response(output, status=status.HTTP_200_OK)
             
-        #     except ImagesToConvert.DoesNotExist:
-        #         return Response("There is no images to converty")
-        # except ArObject.DoesNotExist:
-        #     return Response("There is no such aug model")
+            except ImagesToConvert.DoesNotExist:
+                return Response("There is no images to converty")
+        except ArObject.DoesNotExist:
+            return Response("There is no such aug model")
         print(request.data)
         return Response("Recieved")
     
